@@ -87,10 +87,10 @@ const HappyIcon = ({ className, strokeWidth }: any) => (
 );
 
 const MOODS: { id: Mood; labelEn: string; labelAr: string; emoji: string; Icon: React.ElementType }[] = [
-  { id: 'DEPRESSED', labelEn: 'Depressed', labelAr: 'مُحبَط', emoji: '😭', Icon: DepressedIcon },
-  { id: 'SAD', labelEn: 'Sad', labelAr: 'حزين', emoji: '😢', Icon: SadIcon },
-  { id: 'NEUTRAL', labelEn: 'Neutral', labelAr: 'راضي', emoji: '😐', Icon: NeutralIcon },
-  { id: 'HAPPY', labelEn: 'Happy', labelAr: 'سعيد', emoji: '😊', Icon: HappyIcon },
+  { id: 'DEPRESSED', labelEn: 'DEPRESSED', labelAr: 'مُحبَط', emoji: '😭', Icon: DepressedIcon },
+  { id: 'SAD', labelEn: 'SAD', labelAr: 'حزين', emoji: '😢', Icon: SadIcon },
+  { id: 'NEUTRAL', labelEn: 'NEUTRAL', labelAr: 'راضي', emoji: '😐', Icon: NeutralIcon },
+  { id: 'HAPPY', labelEn: 'HAPPY', labelAr: 'سعيد', emoji: '😊', Icon: HappyIcon },
 ];
 
 export const MoodSelector: React.FC = () => {
@@ -171,7 +171,7 @@ export const MoodSelector: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-3xl mx-auto w-full pb-6 pt-3 px-1 sm:px-0">
-          {MOODS.map(({ id, labelEn, labelAr, emoji }) => {
+          {MOODS.map(({ id, labelEn, labelAr, Icon }) => {
             const isSelected = selectedMood === id;
             return (
               <motion.button
@@ -179,16 +179,21 @@ export const MoodSelector: React.FC = () => {
                 whileTap={{ scale: 0.96 }}
                 whileHover={{ y: -3 }}
                 onClick={() => handleMoodSelect(id)}
-                className={`group relative flex flex-col items-center justify-center rounded-[20px] sm:rounded-[26px] border p-2.5 sm:p-4 min-h-[96px] sm:min-h-[132px] transition-all duration-300 text-center outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E]/40 focus-visible:ring-offset-2 ${
+                className={`group relative flex flex-col items-center justify-center rounded-full border p-2.5 sm:p-4 min-h-[96px] sm:min-h-[132px] transition-all duration-300 text-center outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E]/40 focus-visible:ring-offset-2 ${
                   isSelected
-                    ? 'bg-gradient-to-br from-[#22C55E] to-[#16A34A] text-white border-transparent shadow-[0_15px_30px_rgba(34,197,94,0.15)] sm:shadow-[0_22px_45px_rgba(34,197,94,0.18)]'
-                    : 'bg-white border border-slate-200 text-slate-700 shadow-sm hover:border-slate-300 hover:shadow-md'
+                    ? 'bg-[#22C55E] text-white border-transparent shadow-[0_15px_30px_rgba(34,197,94,0.15)] sm:shadow-[0_22px_45px_rgba(34,197,94,0.18)]'
+                    : 'bg-[#F3F4F6] border-transparent text-[#6B7280] hover:bg-[#E5E7EB]'
                 }`}
                 aria-pressed={isSelected}
                 aria-label={`Set mood to ${labelEn}`}
               >
-                <span className="text-[28px] sm:text-[40px] mb-1.5 sm:mb-2 select-none">{emoji}</span>
-                <span className={`text-[10.5px] sm:text-[13px] font-extrabold tracking-[0.01em] sm:tracking-[0.02em] leading-tight ${isSelected ? 'text-white' : 'text-slate-600'}`}>
+                <Icon
+                  className={`w-9 h-9 sm:w-11 sm:h-11 mb-2.5 select-none transition-colors duration-300 ${
+                    isSelected ? 'text-white' : 'text-[#6B7280] group-hover:text-slate-700'
+                  }`}
+                  strokeWidth={2}
+                />
+                <span className={`text-[10px] sm:text-[12px] font-black tracking-wider uppercase leading-tight ${isSelected ? 'text-white' : 'text-[#6B7280]'}`}>
                   {language === 'ar' ? labelAr : labelEn}
                 </span>
               </motion.button>
