@@ -1,18 +1,119 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Home, Calendar, History, Sparkles, BarChart3, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'motion/react';
 
+// Custom icons matching the user's design EXACTLY
+const HomeIcon = ({ isActive, ...props }: any) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill={isActive ? 'currentColor' : 'none'}
+    stroke="currentColor"
+    strokeWidth={props.strokeWidth || 2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={props.className}
+  >
+    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+    <path d="M9 22V12h6v10" fill={isActive ? 'white' : 'none'} />
+  </svg>
+);
+
+const CalendarIcon = ({ isActive, ...props }: any) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={props.strokeWidth || 2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={props.className}
+  >
+    <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+    <line x1="16" x2="16" y1="2" y2="6" />
+    <line x1="8" x2="8" y1="2" y2="6" />
+    <line x1="3" x2="21" y1="10" y2="10" />
+    <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" />
+  </svg>
+);
+
+const SessionsIcon = ({ isActive, ...props }: any) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={props.strokeWidth || 2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={props.className}
+  >
+    <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+    <line x1="16" x2="16" y1="2" y2="6" />
+    <line x1="8" x2="8" y1="2" y2="6" />
+    <line x1="3" x2="21" y1="10" y2="10" />
+    <line x1="8" y1="14" x2="16" y2="14" />
+    <line x1="8" y1="18" x2="13" y2="18" />
+  </svg>
+);
+
+const RelaxIcon = ({ isActive, ...props }: any) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={props.strokeWidth || 2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={props.className}
+  >
+    <circle cx="12" cy="6" r="2" />
+    <path d="M12 8v6" />
+    <path d="M6 12c1.5-1.5 3-2 6-2s4.5.5 6 2" />
+    <path d="M3 18c2-2 4.5-2.5 9-2.5s7 1 9 2.5" />
+    <path d="M6 20h12" />
+  </svg>
+);
+
+const StatsIcon = ({ isActive, ...props }: any) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={props.strokeWidth || 2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={props.className}
+  >
+    <line x1="6" y1="20" x2="6" y2="14" />
+    <line x1="12" y1="20" x2="12" y2="6" />
+    <line x1="18" y1="20" x2="18" y2="11" />
+  </svg>
+);
+
+const ProfileIcon = ({ isActive, ...props }: any) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={props.strokeWidth || 2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={props.className}
+  >
+    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
 const NAV_ITEMS = [
-  { id: 'home', label: 'Home', Icon: Home, href: '/dashboard' },
-  { id: 'calendar', label: 'Calendar', Icon: Calendar, href: '/calendar' },
-  { id: 'sessions', label: 'Sessions', Icon: History, href: '/sessions' },
-  { id: 'relax', label: 'Relax', Icon: Sparkles, href: '/relax' },
-  { id: 'stats', label: 'Stats', Icon: BarChart3, href: '/stats' },
-  { id: 'profile', label: 'Profile', Icon: User, href: '/profile' },
+  { id: 'home', label: 'Home', Icon: HomeIcon, href: '/dashboard' },
+  { id: 'calendar', label: 'Calendar', Icon: CalendarIcon, href: '/calendar' },
+  { id: 'sessions', label: 'Sessions', Icon: SessionsIcon, href: '/sessions' },
+  { id: 'relax', label: 'Relax', Icon: RelaxIcon, href: '/relax' },
+  { id: 'stats', label: 'Stats', Icon: StatsIcon, href: '/stats' },
+  { id: 'profile', label: 'Profile', Icon: ProfileIcon, href: '/profile' },
 ];
 
 export const BottomNav: React.FC = () => {
@@ -106,6 +207,7 @@ export const BottomNav: React.FC = () => {
               <div className="relative z-10 flex flex-col items-center gap-1">
                 <div className={`p-1 rounded-xl transition-all duration-300 relative ${isActive ? 'scale-110' : ''}`}>
                   <Icon 
+                    isActive={isActive}
                     className={`w-6 h-6 transition-all duration-300 ${isActive ? 'text-[#30BE4F]' : 'text-[#A0B3C6]'}`} 
                     strokeWidth={isActive ? 2.5 : 2} 
                   />

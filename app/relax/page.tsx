@@ -21,7 +21,7 @@ const EXERCISES = [
     duration: '10 min session',
     Icon: Activity,
     iconBg: 'bg-[#10B981]',
-    href: '#',
+    href: '/relax/zone',
   },
   {
     id: 'sounds',
@@ -30,7 +30,7 @@ const EXERCISES = [
     Icon: Headphones,
     iconBg: 'bg-white border border-orange-400',
     iconColor: 'text-orange-400',
-    href: '#',
+    href: '/relax/zone',
   },
   {
     id: 'journal',

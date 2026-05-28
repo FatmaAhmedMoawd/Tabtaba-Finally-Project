@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { MoreVertical, Mic, Send, Trash2, ChevronLeft, Bot, User, Sparkles, Wind, Moon, Heart, Smile } from 'lucide-react';
+import { MoreVertical, Mic, Send, Trash2, ChevronLeft, Moon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
+import Link from 'next/link';
 
 type Message = {
   id: string;
@@ -11,36 +12,74 @@ type Message = {
   text: string;
   timestamp: string;
   read?: boolean;
+  showWidget?: boolean;
 };
 
 const INITIAL_MESSAGES: Message[] = [
   {
     id: '1',
     type: 'ai',
-    text: "Hello! I'm here to provide a safe space for whatever is on your mind today. How are you feeling in this moment?",
+    text: "Hello toka! I'm here to listen. How are you feeling today?",
     timestamp: '10:10 AM',
   },
   {
     id: '2',
     type: 'user',
-    text: "I've been feeling quite overwhelmed with work lately. It feels like everything is piling up at once.",
+    text: "I'm feeling a bit stressed from work.",
     timestamp: '10:12 AM',
     read: true,
   },
   {
     id: '3',
     type: 'ai',
-    text: "I hear you. That feeling of \"piling up\" can be very heavy. Let's try to break that down into smaller, more manageable pieces together.\n\nWould you like to talk about what's on your mind, or maybe try a quick relaxation exercise?",
+    text: "I understand. Work can be overwhelming. Would you like to try a quick breathing exercise, or just talk about what's bothering you?",
     timestamp: '10:13 AM',
+    showWidget: true,
   }
 ];
 
-const SUGGESTIONS = [
-  { id: 'anxious', label: "I'm feeling anxious", icon: Sparkles, color: "text-amber-500", bg: "bg-amber-50", border: "border-amber-100" },
-  { id: 'sleep', label: "Help with sleep", icon: Moon, color: "text-indigo-500", bg: "bg-indigo-50", border: "border-indigo-100" },
-  { id: 'vent', label: "Just want to vent", icon: Heart, color: "text-rose-500", bg: "bg-rose-50", border: "border-rose-100" },
-  { id: 'breath', label: "Breathing exercise", icon: Wind, color: "text-emerald-500", bg: "bg-emerald-50", border: "border-emerald-100" },
-];
+const TabtabaAvatarIcon = ({ className = "w-11 h-11" }: { className?: string }) => (
+  <div className={`rounded-full bg-[#30C45D] flex items-center justify-center ${className} shrink-0 overflow-hidden shadow-sm`}>
+    <svg viewBox="0 0 100 100" className="w-[75%] h-[75%] text-[#064E3B] fill-none" stroke="currentColor" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round">
+      {/* Head outline */}
+      <circle cx="50" cy="53" r="30" strokeWidth="6.5" />
+      
+      {/* Hair bangs */}
+      <path d="M22 50 C28 35, 72 35, 78 50" strokeWidth="6" />
+      
+      {/* Headset band */}
+      <path d="M20 53 C20 23, 80 23, 80 53" strokeWidth="6.5" />
+      
+      {/* Headset ear cups */}
+      <rect x="14" y="44" width="7" height="18" rx="3.5" fill="currentColor" stroke="none" />
+      <rect x="79" y="44" width="7" height="18" rx="3.5" fill="currentColor" stroke="none" />
+      
+      {/* Eyes */}
+      <circle cx="38" cy="55" r="4.5" fill="currentColor" stroke="none" />
+      <circle cx="62" cy="55" r="4.5" fill="currentColor" stroke="none" />
+      
+      {/* Smile */}
+      <path d="M44 68 C47 72, 53 72, 56 68" strokeWidth="6" />
+      
+      {/* Microphone boom arm */}
+      <path d="M18 60 Q26 76 46 72" strokeWidth="5.5" />
+    </svg>
+  </div>
+);
+
+const DiamondAlert = ({ className = "w-4 h-4" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M12 2.69l7.9 7.9c.78.78.78 2.05 0 2.83L12 21.31l-7.9-7.9a2 2 0 0 1 0-2.83L12 2.69z" />
+    <line x1="12" y1="8" x2="12" y2="12" />
+    <line x1="12" y1="16" x2="12.01" y2="16" />
+  </svg>
+);
+
+const WindIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2" />
+  </svg>
+);
 
 function getRandomAIResponse() {
   const responses = [
@@ -62,9 +101,6 @@ export function ChatInterface() {
   const [recordingTime, setRecordingTime] = useState(0);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Use a stable reference for ID generation to avoid purity issues in render
-  // but really we should just use the messages length for these mock IDs
   
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -74,7 +110,6 @@ export function ChatInterface() {
     scrollToBottom();
   }, [messages, isAiTyping]);
 
-  // Handle AI Response in an effect to separate side effects from event handlers
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     if (lastMessage && lastMessage.type === 'user') {
@@ -120,7 +155,7 @@ export function ChatInterface() {
         id: `user-${prev.length}`,
         type: 'user',
         text,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }),
         read: true
       }
     ]);
@@ -150,25 +185,23 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-[#F8FAFC] font-inter max-w-lg lg:max-w-xl mx-auto shadow-sm relative overflow-hidden">
+    <div className="flex flex-col h-[100dvh] bg-gradient-to-br from-[#FAFCF9] via-[#F4F9F5] to-[#FCF9F0] font-inter max-w-lg mx-auto shadow-sm relative overflow-hidden">
       {/* Header */}
-      <header className="flex items-center justify-between px-5 py-4 bg-white sticky top-0 z-40 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] rounded-b-[24px]">
+      <header className="flex items-center justify-between px-5 py-4 bg-white sticky top-0 z-40 shadow-[0_2px_10px_rgba(0,0,0,0.03)] rounded-b-[24px]">
         <div className="flex items-center gap-3">
           <button 
             onClick={() => router.back()} 
             className="p-2 -ml-2 text-[#475569] hover:bg-[#F1F5F9] rounded-full transition-colors active:scale-95" 
           >
-            <ChevronLeft size={24} strokeWidth={2.5} />
+            <ChevronLeft size={22} strokeWidth={2.5} />
           </button>
-          <div className="relative">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#10B981] to-[#059669] flex items-center justify-center shadow-md shadow-emerald-200">
-              <Bot size={26} className="text-white" />
-            </div>
-            <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#10B981] border-2 border-white ring-1 ring-emerald-500/20"></span>
-          </div>
+          <TabtabaAvatarIcon className="w-11 h-11" />
           <div className="flex flex-col">
-            <h1 className="text-[17px] font-bold text-[#1E293B] leading-tight">Tabtaba AI</h1>
-            <span className="text-[12px] font-medium text-emerald-600">Online</span>
+            <h1 className="text-[17px] font-bold text-[#1C1C1C] leading-tight">Tabtaba AI Assistant</h1>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="w-2 h-2 rounded-full bg-[#30C45D]"></span>
+              <span className="text-[12px] font-bold text-[#0D7A39]">Ready to listen</span>
+            </div>
           </div>
         </div>
         <button className="p-2 text-[#475569] hover:bg-[#F1F5F9] rounded-full transition-colors">
@@ -187,38 +220,62 @@ export function ChatInterface() {
               transition={{ type: 'spring', damping: 20, stiffness: 200 }}
               className={`flex w-full ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <div className={`flex gap-3 max-w-[85%] ${message.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+              <div className={`flex gap-3 max-w-[88%] ${message.type === 'user' ? 'flex-row-reverse' : 'flex-row items-end'}`}>
                 {message.type === 'ai' && (
-                  <div className="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0 shadow-sm border border-emerald-50">
-                    <Bot size={20} className="text-emerald-600" />
-                  </div>
+                  <TabtabaAvatarIcon className="w-9 h-9 mb-1" />
                 )}
                 
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 w-full">
                   <div 
                     className={`px-5 py-4 text-[15px] leading-relaxed shadow-sm transition-all duration-300 ${
                       message.type === 'user' 
-                        ? 'bg-[#10B981] text-white rounded-[22px] rounded-tr-none' 
-                        : 'bg-white text-[#334155] rounded-[22px] rounded-tl-none border border-slate-100'
+                        ? 'bg-[#2D6A12] text-white rounded-[24px] rounded-br-[4px]' 
+                        : 'bg-[#F0F4EC] text-[#2C3A24] rounded-[24px] rounded-bl-[4px]'
                     }`}
                   >
                     {message.text.split('\n').map((line, i) => (
                       <p key={i} className={i > 0 ? 'mt-2' : ''}>{line}</p>
                     ))}
                   </div>
-                  <div className={`flex items-center gap-1 text-[11px] font-medium text-[#94A3B8] px-1 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <span>{message.timestamp}</span>
-                    {message.type === 'user' && message.read && (
-                      <span className="text-emerald-500 font-bold ml-1">✓</span>
-                    )}
-                  </div>
-                </div>
+                  
+                  {message.type === 'user' && (
+                    <div className="flex items-center gap-1 text-[11px] font-bold text-[#829285] px-1 justify-end mt-0.5">
+                      <span>Read • {message.timestamp}</span>
+                    </div>
+                  )}
 
-                {message.type === 'user' && (
-                  <div className="w-9 h-9 rounded-xl bg-slate-200 flex items-center justify-center shrink-0 shadow-sm border border-slate-100 overflow-hidden">
-                    <User size={20} className="text-slate-500" />
-                  </div>
-                )}
+                  {/* Breathing Exercise Card inline */}
+                  {message.type === 'ai' && message.showWidget && (
+                    <div className="bg-[#E6F4F0] rounded-[32px] p-5 flex flex-col gap-4 mt-3 max-w-full shadow-sm border border-[#D5EAE3]">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-full bg-[#C2E5DB] flex items-center justify-center text-[#0D7A39] shrink-0">
+                          <WindIcon className="w-6 h-6" />
+                        </div>
+                        <div className="flex flex-col">
+                          <h4 className="font-bold text-[#1C1C1C] text-[16px] leading-tight">Quick Calm Breathing</h4>
+                          <span className="text-gray-500 text-[13px] font-medium">Guided Session • 2 min</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex-1 h-[6px] bg-[#D4EAE3] rounded-full relative overflow-hidden">
+                          <div className="w-[30%] h-full bg-[#0D7A39] rounded-full" />
+                        </div>
+                        <span className="text-[#0C7335] text-[10px] font-bold tracking-wider">PROGRESS</span>
+                      </div>
+
+                      <Link 
+                        href="/relax/zone"
+                        className="w-full bg-[#30C45D] hover:bg-[#2AA950] text-white rounded-full py-3 flex items-center justify-center gap-2 font-bold text-[14px] transition-colors shadow-sm"
+                      >
+                        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                        Start Now
+                      </Link>
+                    </div>
+                  )}
+                </div>
               </div>
             </motion.div>
           ))}
@@ -230,14 +287,12 @@ export function ChatInterface() {
             animate={{ opacity: 1, y: 0 }}
             className="flex justify-start"
           >
-            <div className="flex gap-3">
-              <div className="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0 animate-pulse">
-                <Bot size={20} className="text-emerald-600" />
-              </div>
-              <div className="bg-white border border-slate-100 rounded-[22px] rounded-tl-none px-5 py-4 flex items-center gap-1 shadow-sm">
-                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce"></span>
+            <div className="flex gap-3 items-end">
+              <TabtabaAvatarIcon className="w-9 h-9 mb-1" />
+              <div className="bg-[#F0F4EC] rounded-[24px] rounded-bl-[4px] px-5 py-4 flex items-center gap-1 shadow-sm">
+                <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-bounce"></span>
               </div>
             </div>
           </motion.div>
@@ -246,45 +301,57 @@ export function ChatInterface() {
       </div>
 
       {/* Suggestion Chips */}
-      <div className="px-5 mb-4 overflow-x-auto scrollbar-hide py-1">
-        <div className="flex gap-2 min-w-max pb-1">
-          {SUGGESTIONS.map((s) => (
-            <button 
-              key={s.id}
-              onClick={() => handleSendMessage(s.label)}
-              className={`flex items-center gap-2 px-4 py-2.5 ${s.bg} border ${s.border} rounded-2xl text-[14px] font-bold ${s.color} hover:brightness-95 transition-all active:scale-95 shadow-sm`}
-            >
-              <s.icon size={18} strokeWidth={2.5} />
-              {s.label}
-            </button>
-          ))}
+      <div className="flex flex-col items-center gap-3 px-5 mb-4">
+        <div className="flex gap-3 justify-center w-full">
+          <button 
+            onClick={() => handleSendMessage("I'm feeling anxious")}
+            className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 rounded-full text-[14px] font-bold text-[#1E7B44] hover:bg-gray-50 active:scale-95 transition-all shadow-sm"
+          >
+            <DiamondAlert className="w-4 h-4 text-[#1E7B44]" />
+            I'm feeling anxious
+          </button>
+          <button 
+            onClick={() => handleSendMessage("Help with sleep")}
+            className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 rounded-full text-[14px] font-bold text-[#1E7B44] hover:bg-gray-50 active:scale-95 transition-all shadow-sm"
+          >
+            <Moon className="w-4 h-4 text-[#1E7B44]" />
+            Help with sleep
+          </button>
         </div>
+        
+        <Link 
+          href="/relax/zone"
+          className="flex items-center gap-2.5 px-6 py-3 bg-[#30C45D] hover:bg-[#2AA950] rounded-full text-[14px] font-bold text-white active:scale-95 transition-all shadow-md shadow-green-200/50"
+        >
+          <WindIcon className="w-4 h-4 text-white" />
+          Breathing exercises
+        </Link>
       </div>
 
       {/* Input Bar */}
-      <div className="p-5 pt-0 bg-white z-40 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.05)] rounded-t-[32px]">
-        <div className="flex gap-3 items-center mt-4">
-          <div className="flex-1 bg-slate-100 rounded-[24px] min-h-[56px] flex items-center px-5 focus-within:bg-white focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:shadow-md transition-all duration-300">
+      <div className="p-5 pt-0 bg-transparent z-40">
+        <div className="flex gap-3 items-center">
+          <div className="flex-1 bg-[#F2F4F0] rounded-full min-h-[56px] flex items-center px-6 border border-transparent focus-within:border-gray-200 focus-within:bg-white focus-within:shadow-md transition-all duration-300">
             <input 
               type="text" 
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-              placeholder="Type your safe space talk..." 
-              className="flex-1 bg-transparent border-none outline-none text-[15.5px] placeholder:text-slate-400 text-slate-700 py-3"
+              placeholder="Type your message here..." 
+              className="flex-1 bg-transparent border-none outline-none text-[15.5px] placeholder:text-gray-400 text-gray-700 py-3"
             />
             <button 
               onClick={handleStartRecording}
-              className="p-2 text-slate-400 hover:text-emerald-600 transition-colors"
+              className="p-2 text-gray-500 hover:text-green-600 transition-colors"
             >
               <Mic size={22} strokeWidth={2} />
             </button>
           </div>
           <button 
             onClick={() => handleSendMessage()}
-            className="w-[56px] h-[56px] rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-all active:scale-90 shrink-0"
+            className="w-[56px] h-[56px] rounded-full bg-[#30C45D] flex items-center justify-center text-white shadow-lg shadow-green-200/50 hover:bg-[#2AA950] transition-all active:scale-90 shrink-0"
           >
-            <Send size={22} strokeWidth={2} className="ml-0.5" />
+            <Send size={22} strokeWidth={2.2} className="ml-0.5" />
           </button>
         </div>
       </div>
@@ -292,7 +359,7 @@ export function ChatInterface() {
       {/* Recording Overlay */}
       <AnimatePresence>
         {isRecording && (
-          <div className="fixed inset-0 z-50 flex flex-col justify-end">
+          <div className="fixed inset-0 z-50 flex flex-col justify-end animate-fade-in">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -328,7 +395,7 @@ export function ChatInterface() {
                   return (
                     <div 
                       key={i} 
-                      className="w-[5px] bg-emerald-400 rounded-full animate-pulse shadow-sm"
+                      className="w-[5px] bg-[#30C45D] rounded-full animate-pulse shadow-sm"
                       style={{ 
                         height: `${heights[i]}%`,
                         animationDelay: `${i * 0.05}s`,
@@ -351,7 +418,7 @@ export function ChatInterface() {
                 
                 <button 
                   onClick={handleSendRecording}
-                  className="w-14 h-14 bg-emerald-600 text-white rounded-3xl flex items-center justify-center shadow-lg shadow-emerald-200 active:scale-95 transition-all"
+                  className="w-14 h-14 bg-[#30C45D] text-white rounded-3xl flex items-center justify-center shadow-lg shadow-green-100 active:scale-95 transition-all"
                 >
                   <Send size={24} strokeWidth={2.5} className="ml-1" />
                 </button>
