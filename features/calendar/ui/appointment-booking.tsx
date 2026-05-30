@@ -8,9 +8,7 @@ import { ChevronLeft, ChevronRight, Check, Lock, AlertCircle } from 'lucide-reac
 import { DOCTORS } from '@/features/sessions/model/doctors';
 
 const ALL_AVAILABLE_TIMES = [
-  '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
-  '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM',
-  '06:00 PM', '07:00 PM', '08:00 PM', '09:00 PM', '10:00 PM', '11:00 PM'
+  '10:00 AM', '12:00 AM', '02:00 PM', '03:00 PM', '04:00 PM'
 ];
 
 const reminderOptions = [
@@ -189,57 +187,6 @@ export function AppointmentBooking() {
     }
   };
 
-  if (showSuccess) {
-    return (
-      <div className="flex flex-col h-[100dvh] bg-[#FAFAFA] font-inter max-w-lg lg:max-w-xl mx-auto relative overflow-hidden">
-        
-        {/* Header with Title and Back Arrow (Background slightly dimmed ideally, but we show success modal over it) */}
-        <div className="absolute inset-0 bg-black/40 z-10"></div>
-        
-        {/* Background screen behind modal */}
-        <div className="flex flex-col h-full bg-[#EAF2F8] opacity-50 pt-16 px-5 relative">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2 text-[#0D7A39] font-bold text-xl">
-              <ChevronLeft size={24} />
-              Appointment
-            </div>
-          </div>
-        </div>
-
-        {/* Success Modal (updated to match design) */}
-        <div className="absolute inset-0 z-20 flex items-center justify-center p-5 pb-28 animate-in fade-in zoom-in-95 duration-300">
-          <div className="bg-white rounded-[20px] w-full max-w-sm p-6 flex flex-col items-center shadow-[0_20px_50px_rgba(15,23,42,0.15)] text-center max-h-[95vh] overflow-y-auto">
-            <div className="w-24 h-24 bg-[#E8F8EE] rounded-full flex items-center justify-center mb-4 shrink-0">
-              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path fill="#22C55E" d="M7 22h6c1.1 0 2-.9 2-2v-6h3a2 2 0 0 0 1.8-1.2l1-3A2 2 0 0 0 20 7.5 4 4 0 0 0 16 4h-2.2c-.8 0-1.6.5-1.9 1.2L10 11H7c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2z" />
-              </svg>
-            </div>
-
-            <h2 className="text-[22px] font-extrabold text-[#111827] mb-1">Thank You !</h2>
-            <p className="text-[#374151] text-[15px] font-semibold mb-3">Your Appointment Successful</p>
-
-            <p className="text-[#6B7280] text-[13px] mb-5 px-3">You booked an appointment with <span className="font-bold text-[#111827">{doctor.name}</span> on {formattedSelectedDateStr}, at {selectedTime}.</p>
-
-            <button
-              onClick={() => {
-                router.push(`/sessions/booking-details?doctorId=${doctor.id}&date=${encodeURIComponent(formattedSelectedDateStr)}&time=${encodeURIComponent(selectedTime || '')}&reminder=${selectedReminder || ''}`);
-              }}
-              className="w-full bg-[#0D7A39] text-white py-3.5 rounded-xl font-semibold text-[16px] mb-3 hover:bg-[#0A602D] transition-colors"
-            >
-              Done
-            </button>
-
-            <button
-              onClick={() => setShowSuccess(false)}
-              className="text-[#6B7280] text-[14px] hover:text-[#111827] transition-colors"
-            >
-              Edit your appointment
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (!isMounted) {
     return <div className="flex flex-col h-[100dvh] overflow-y-auto bg-[#EAF2F8] font-inter max-w-lg lg:max-w-xl mx-auto pb-6" />;
@@ -462,6 +409,49 @@ export function AppointmentBooking() {
                 Cancel & Go Back / الرجوع للخلف
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Modal overlay */}
+      {showSuccess && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setShowSuccess(false)} />
+          <div className="bg-white rounded-[32px] w-[342px] max-w-full p-8 flex flex-col items-center shadow-[0_20px_50px_rgba(15,23,42,0.15)] text-center relative z-[10000] animate-in fade-in zoom-in-95 duration-200">
+            <div className="w-[145px] h-[145px] bg-[#E8F8EE] rounded-full flex items-center justify-center mb-6 shrink-0">
+              <svg width="68" height="68" viewBox="0 0 24 24" fill="currentColor" className="text-[#22C55E]" aria-hidden="true">
+                <path d="M2 20h2c.55 0 1-.45 1-1v-9c0-.55-.45-1-1-1H2c-.55 0-1 .45-1 1v9c0 .55.45 1 1 1zm19.83-9.12c-.12-.42-.4-.76-.79-.93L16.5 8h-1.89l.86-3.43c.12-.5.03-1.03-.26-1.45l-.47-.68c-.3-.43-.8-.69-1.33-.69h-.6c-.52 0-1.02.24-1.34.66L7.42 8.03C7.15 8.39 7 8.83 7 9.29V17c0 1.1.9 2 2 2h8.13c.89 0 1.69-.58 1.93-1.43l2.03-7.1c.15-.5.06-1.04-.26-1.42z" />
+              </svg>
+            </div>
+
+            <h2 className="text-[28px] font-extrabold text-[#111827] mb-1.5 leading-tight tracking-tight">Thank You !</h2>
+            <p className="text-[#5F6D7E] text-[16px] font-semibold mb-6">Your Appointment Successful</p>
+
+            <p className="text-[#5F6D7E] text-[14.5px] leading-relaxed mb-8 max-w-[270px]">
+              You booked an appointment with {doctor.name} on{' '}
+              {selectedDateObj ? (
+                `${monthNames[selectedDateObj.getMonth()]} ${selectedDateObj.getDate()}`
+              ) : (
+                'February 21'
+              )}
+              , at {selectedTime}.
+            </p>
+
+            <button
+              onClick={() => {
+                router.push(`/sessions/booking-details?doctorId=${doctor.id}&date=${encodeURIComponent(formattedSelectedDateStr)}&time=${encodeURIComponent(selectedTime || '')}&reminder=${selectedReminder || ''}`);
+              }}
+              className="w-full bg-[#0D7A39] hover:bg-[#0A602D] text-white py-4 rounded-[16px] font-bold text-[16px] mb-4 transition-colors cursor-pointer"
+            >
+              Done
+            </button>
+
+            <button
+              onClick={() => setShowSuccess(false)}
+              className="text-[#5F6D7E] hover:text-[#111827] font-semibold text-[14px] transition-colors cursor-pointer"
+            >
+              Edit your appointment
+            </button>
           </div>
         </div>
       )}

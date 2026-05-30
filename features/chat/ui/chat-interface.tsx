@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Mic, Send, Trash2, ChevronLeft, Moon } from 'lucide-react';
+import { Mic, Send, Trash2, ChevronLeft, Moon, MoreVertical } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
@@ -185,7 +185,7 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-gradient-to-br from-[#FAFCF9] via-[#F4F9F5] to-[#FCF9F0] font-inter max-w-lg mx-auto shadow-sm relative overflow-hidden">
+    <div className="flex flex-col h-[100dvh] bg-[#FAFCFB] font-inter max-w-lg mx-auto shadow-sm relative overflow-hidden">
       {/* Header */}
       <header className="flex items-center justify-between px-5 py-4 bg-white sticky top-0 z-40 shadow-[0_2px_10px_rgba(0,0,0,0.03)] rounded-b-[24px]">
         <div className="flex items-center gap-3">
@@ -204,8 +204,8 @@ export function ChatInterface() {
             </div>
           </div>
         </div>
-        <button className="p-2 text-[#475569] hover:bg-[#F1F5F9] rounded-full transition-colors">
-              <div className="w-5 h-5" aria-hidden="true" />
+        <button className="p-2 text-[#475569] hover:bg-[#F1F5F9] rounded-full transition-colors active:scale-95">
+          <MoreVertical size={20} className="text-[#475569]" />
         </button>
       </header>
 
@@ -224,13 +224,20 @@ export function ChatInterface() {
                 {message.type === 'ai' && (
                   <TabtabaAvatarIcon className="w-9 h-9 mb-1" />
                 )}
+                {message.type === 'user' && (
+                  <div className="w-9 h-9 bg-[#E2E8F0] rounded-full flex items-center justify-center shrink-0 mb-1 shadow-sm">
+                    <svg viewBox="0 0 24 24" className="w-[60%] h-[60%] text-[#64748B]" fill="currentColor">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
+                  </div>
+                )}
                 
                 <div className="flex flex-col gap-1 w-full">
                   <div 
                     className={`px-5 py-4 text-[15px] leading-relaxed shadow-sm transition-all duration-300 ${
                       message.type === 'user' 
-                        ? 'bg-[#2D6A12] text-white rounded-[24px] rounded-br-[4px]' 
-                        : 'bg-[#F0F4EC] text-[#2C3A24] rounded-[24px] rounded-bl-[4px]'
+                        ? 'bg-[#3B6B10] text-white rounded-[24px] rounded-br-[4px]' 
+                        : 'bg-[#F4F6EC] text-[#1C1C1C] rounded-[24px] rounded-bl-[4px]'
                     }`}
                   >
                     {message.text.split('\n').map((line, i) => (
@@ -289,7 +296,7 @@ export function ChatInterface() {
           >
             <div className="flex gap-3 items-end">
               <TabtabaAvatarIcon className="w-9 h-9 mb-1" />
-              <div className="bg-[#F0F4EC] rounded-[24px] rounded-bl-[4px] px-5 py-4 flex items-center gap-1 shadow-sm">
+              <div className="bg-[#F4F6EC] rounded-[24px] rounded-bl-[4px] px-5 py-4 flex items-center gap-1 shadow-sm">
                 <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
                 <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
                 <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-bounce"></span>
@@ -305,25 +312,25 @@ export function ChatInterface() {
         <div className="flex gap-3 justify-center w-full">
           <button 
             onClick={() => handleSendMessage("I'm feeling anxious")}
-            className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 rounded-full text-[14px] font-bold text-[#1E7B44] hover:bg-gray-50 active:scale-95 transition-all shadow-sm"
+            className="flex items-center gap-2 px-5 py-3 bg-white border border-[#D2E0D5] rounded-full text-[14px] font-bold text-[#3B6B10] hover:bg-gray-50 active:scale-95 transition-all shadow-sm"
           >
-            <DiamondAlert className="w-4 h-4 text-[#1E7B44]" />
+            <DiamondAlert className="w-4 h-4 text-[#3B6B10]" />
             I'm feeling anxious
           </button>
           <button 
             onClick={() => handleSendMessage("Help with sleep")}
-            className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 rounded-full text-[14px] font-bold text-[#1E7B44] hover:bg-gray-50 active:scale-95 transition-all shadow-sm"
+            className="flex items-center gap-2 px-5 py-3 bg-white border border-[#D2E0D5] rounded-full text-[14px] font-bold text-[#3B6B10] hover:bg-gray-50 active:scale-95 transition-all shadow-sm"
           >
-            <Moon className="w-4 h-4 text-[#1E7B44]" />
+            <Moon className="w-4 h-4 text-[#3B6B10]" />
             Help with sleep
           </button>
         </div>
         
         <Link 
           href="/relax/zone"
-          className="flex items-center gap-2.5 px-6 py-3 bg-[#30C45D] hover:bg-[#2AA950] rounded-full text-[14px] font-bold text-white active:scale-95 transition-all shadow-md shadow-green-200/50"
+          className="flex items-center gap-2 px-5 py-3 bg-white border border-[#D2E0D5] rounded-full text-[14px] font-bold text-[#3B6B10] hover:bg-gray-50 active:scale-95 transition-all shadow-sm"
         >
-          <WindIcon className="w-4 h-4 text-white" />
+          <WindIcon className="w-4 h-4 text-[#3B6B10]" />
           Breathing exercises
         </Link>
       </div>
@@ -331,14 +338,14 @@ export function ChatInterface() {
       {/* Input Bar */}
       <div className="p-5 pt-0 bg-transparent z-40">
         <div className="flex gap-3 items-center">
-          <div className="flex-1 bg-[#F2F4F0] rounded-full min-h-[56px] flex items-center px-6 border border-transparent focus-within:border-gray-200 focus-within:bg-white focus-within:shadow-md transition-all duration-300">
+          <div className="flex-1 bg-[#F1F3EA] rounded-full min-h-[56px] flex items-center px-6 border border-transparent focus-within:border-gray-200 focus-within:bg-white focus-within:shadow-md transition-all duration-300">
             <input 
               type="text" 
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
               placeholder="Type your message here..." 
-              className="flex-1 bg-transparent border-none outline-none text-[15.5px] placeholder:text-gray-400 text-gray-700 py-3"
+              className="flex-1 bg-transparent border-none outline-none text-[15.5px] placeholder:text-gray-400 text-gray-800 py-3"
             />
             <button 
               onClick={handleStartRecording}
@@ -349,7 +356,7 @@ export function ChatInterface() {
           </div>
           <button 
             onClick={() => handleSendMessage()}
-            className="w-[56px] h-[56px] rounded-full bg-[#30C45D] flex items-center justify-center text-white shadow-lg shadow-green-200/50 hover:bg-[#2AA950] transition-all active:scale-90 shrink-0"
+            className="w-[56px] h-[56px] rounded-full bg-[#3B6B10] flex items-center justify-center text-white shadow-lg shadow-green-200/40 hover:bg-[#2F560C] transition-all active:scale-90 shrink-0"
           >
             <Send size={22} strokeWidth={2.2} className="ml-0.5" />
           </button>
