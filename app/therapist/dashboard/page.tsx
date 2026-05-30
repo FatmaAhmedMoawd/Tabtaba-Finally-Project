@@ -9,7 +9,7 @@ import {
   Calendar as CalendarIcon, 
   Star, 
   PlayCircle, 
-  MoreHorizontal, 
+  
   UserCircle2, 
   Video,
   Banknote
@@ -55,9 +55,7 @@ export default function TherapistDashboardPage() {
                  You have 4 sessions remaining today.
                </p>
              </div>
-             <button className="w-8 h-8 rounded-full flex items-center justify-center text-[#BAC7D5]">
-                <MoreHorizontal size={24} />
-             </button>
+            <div className="w-8 h-8" aria-hidden="true" />
            </div>
 
            {/* Earnings Card */}

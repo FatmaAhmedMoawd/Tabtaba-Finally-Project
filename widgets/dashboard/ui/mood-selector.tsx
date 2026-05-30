@@ -161,13 +161,8 @@ export const MoodSelector: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         <div className="mb-4 text-center sm:text-left">
           <h2 className="text-[20px] sm:text-[22px] font-black text-[#111827] tracking-tight leading-tight" style={{ fontFamily: 'var(--font-inter)' }}>
-            {language === 'ar' ? 'كيف تشعر اليوم؟ ✨' : 'How are you feeling today? ✨'}
+            mood vibe
           </h2>
-          <p className="mt-2 text-[13.5px] sm:text-[14px] text-slate-500 max-w-2xl leading-6">
-            {language === 'ar'
-              ? 'اختار الحالة اللي بتحس بيها دلوقتي وخلي النصيحة تبقى مخصوصة للمزاج بتاعك.'
-              : 'Select your mood and receive a calm, supportive message tailored to how you feel right now.'}
-          </p>
         </div>
 
         <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-3xl mx-auto w-full pb-6 pt-3 px-1 sm:px-0">

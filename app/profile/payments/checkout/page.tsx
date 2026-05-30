@@ -163,7 +163,7 @@ function CheckoutContent() {
             if (selectedMethod === 'card') {
                 router.push('/profile/payments/checkout/add-card');
             } else {
-                router.push('/profile/payments/checkout/vodafone-cash');
+                router.push(`/profile/payments/checkout/digital-wallet?plan=${encodeURIComponent(planName)}&price=${encodeURIComponent(price)}&cycle=${cycle}`);
             }
           }}
           className="w-full mt-12 bg-gradient-to-r from-[#30C45D] to-[#2AA950] text-white h-20 rounded-full text-[21px] font-black shadow-2xl shadow-[#30C45D]/30 flex items-center justify-center gap-3 active:scale-95 transition-transform"

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   ChevronLeft, 
-  MoreHorizontal, 
+  
   Star, 
   ArrowRight, 
   CheckCircle,
@@ -119,14 +119,7 @@ export default function SessionFeedbackPage() {
             <ChevronLeft size={24} strokeWidth={2.5} />
           </button>
           
-          <button 
-            type="button" 
-            className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-400 hover:text-slate-600 border border-slate-100/80 transition-all cursor-pointer shadow-sm active:scale-95"
-            id="more-options-feedback"
-            aria-label="More options"
-          >
-            <MoreHorizontal size={20} strokeWidth={2.5} />
-          </button>
+          <div className="w-10 h-10 rounded-full bg-white" aria-hidden="true" id="more-options-feedback" />
         </header>
 
         {/* Doctor Info Section */}

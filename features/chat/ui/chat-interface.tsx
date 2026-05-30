@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { MoreVertical, Mic, Send, Trash2, ChevronLeft, Moon } from 'lucide-react';
+import { Mic, Send, Trash2, ChevronLeft, Moon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
@@ -205,7 +205,7 @@ export function ChatInterface() {
           </div>
         </div>
         <button className="p-2 text-[#475569] hover:bg-[#F1F5F9] rounded-full transition-colors">
-          <MoreVertical size={20} strokeWidth={2.5} />
+              <div className="w-5 h-5" aria-hidden="true" />
         </button>
       </header>
 

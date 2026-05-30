@@ -4,7 +4,7 @@ import React, { use } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft, MoreHorizontal, Star, Headphones, Heart, GraduationCap, ShieldCheck, MapPin, Search } from 'lucide-react';
+import { ChevronLeft, Star, Headphones, Heart, GraduationCap, ShieldCheck, MapPin, Search } from 'lucide-react';
 import { DOCTORS } from '@/features/sessions/model/doctors';
 
 export default function DoctorProfilePage({ params }: { params: Promise<{ id: string }> }) {
@@ -21,9 +21,7 @@ export default function DoctorProfilePage({ params }: { params: Promise<{ id: st
         <button onClick={() => router.back()} className="p-2 -ml-2 text-gray-600 hover:bg-white/50 rounded-full transition-colors flex items-center">
           <ChevronLeft size={28} />
         </button>
-        <button className="p-2 -mr-2 text-gray-500 hover:bg-white/50 rounded-full transition-colors flex items-center">
-          <MoreHorizontal size={24} />
-        </button>
+        <div className="w-10 h-10" aria-hidden="true" />
       </div>
 
       <div className="max-w-lg lg:max-w-xl mx-auto w-full px-5 flex flex-col pt-2 pb-6">
@@ -108,18 +106,10 @@ export default function DoctorProfilePage({ params }: { params: Promise<{ id: st
         {/* Specialties */}
         <h2 className="text-[19px] font-bold text-[#1C1C1C] mb-4">Specialties</h2>
         <div className="flex flex-wrap gap-2.5 mb-8">
-          {doctor.tags.length > 0 ? doctor.tags.map((tag, idx) => (
-            <span key={idx} className="bg-[#F2F4F7] text-[#1C1C1C] px-4 py-2 rounded-full text-[14px] font-bold capitalize">
-              {tag.toLowerCase()}
-            </span>
-          )) : (
-            <>
-              <span className="bg-[#F2F4F7] text-[#1C1C1C] px-4 py-2 rounded-full text-[14px] font-bold">Anxiety</span>
-              <span className="bg-[#F2F4F7] text-[#1C1C1C] px-4 py-2 rounded-full text-[14px] font-bold">Depression</span>
-              <span className="bg-[#F2F4F7] text-[#1C1C1C] px-4 py-2 rounded-full text-[14px] font-bold">OCD</span>
-              <span className="bg-[#F2F4F7] text-[#1C1C1C] px-4 py-2 rounded-full text-[14px] font-bold">ADHD</span>
-            </>
-          )}
+          <span className="bg-[#F2F4F7] text-[#1C1C1C] px-4 py-2 rounded-full text-[14px] font-bold">Anxiety</span>
+          <span className="bg-[#F2F4F7] text-[#1C1C1C] px-4 py-2 rounded-full text-[14px] font-bold">Depression</span>
+          <span className="bg-[#F2F4F7] text-[#1C1C1C] px-4 py-2 rounded-full text-[14px] font-bold">OCD</span>
+          <span className="bg-[#F2F4F7] text-[#1C1C1C] px-4 py-2 rounded-full text-[14px] font-bold">ADHD</span>
         </div>
 
         {/* Education & Certifications */}

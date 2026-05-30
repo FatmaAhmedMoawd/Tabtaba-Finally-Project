@@ -7,7 +7,7 @@ import {
   Calendar as CalendarIcon,
   Video,
   Plus,
-  MoreHorizontal,
+  
   MessageSquare
 } from 'lucide-react';
 import { TherapistBottomNav } from '@/widgets/therapist/ui/therapist-bottom-nav';
@@ -26,7 +26,7 @@ export default function SchedulePage() {
             </h1>
           </div>
           <div className="flex flex-col items-end gap-6">
-            <MoreHorizontal className="text-[#E2E8F0]" size={24} />
+            <div className="w-6 h-6" aria-hidden="true" />
             <div className="w-12 h-12 rounded-2xl bg-[#EAF6ED] flex items-center justify-center border border-white/50 shadow-sm">
               <CalendarIcon size={24} className="text-[#006D32]" strokeWidth={2} />
             </div>

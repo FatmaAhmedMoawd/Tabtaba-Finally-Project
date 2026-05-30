@@ -9,7 +9,7 @@ import {
   Star, 
   ThumbsUp, 
   ArrowRight,
-  MoreHorizontal
+  
 } from 'lucide-react';
 
 const REVIEWS_DATA = [
@@ -93,9 +93,7 @@ export default function ReviewsPage() {
           <ChevronLeft size={24} strokeWidth={2.5} />
         </button>
         <span className="text-[17px] font-black text-slate-800">Reviews & Ratings</span>
-        <button className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-400 hover:text-slate-600 border border-slate-100/80 transition-all cursor-pointer shadow-sm active:scale-95">
-          <MoreHorizontal size={20} />
-        </button>
+        <div className="w-10 h-10 rounded-full bg-white" aria-hidden="true" />
       </header>
 
       {/* Hero Breakdown Card */}

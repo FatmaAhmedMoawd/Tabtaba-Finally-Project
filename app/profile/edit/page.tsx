@@ -121,7 +121,7 @@ export default function EditProfilePage() {
     }
 
     // Trigger Success Toast
-    setToastMessage('تم حفظ بياناتك بنجاح يا باشا! ✨');
+    setToastMessage('تم تحديث بيانات الملف الشخصي بنجاح');
     setShowToast(true);
 
     setTimeout(() => {

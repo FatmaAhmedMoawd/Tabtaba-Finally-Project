@@ -8,7 +8,7 @@ import { getTherapistRegistrationData, TherapistRegistrationData } from '@/lib/t
 import { 
   Calendar as CalendarIcon,
   Banknote,
-  MoreHorizontal,
+  
   BadgeCheck,
   ChevronRight,
   GraduationCap,
@@ -76,7 +76,7 @@ export default function TherapistProfilePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <MoreHorizontal className="text-[#E2E8F0]" size={28} />
+            <div className="w-7 h-7" aria-hidden="true" />
           </motion.div>
         </div>
 

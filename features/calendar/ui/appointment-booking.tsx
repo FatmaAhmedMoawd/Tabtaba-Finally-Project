@@ -144,6 +144,7 @@ export function AppointmentBooking() {
     setSelectedDate(day);
     const newDateObj = new Date(viewYear, viewMonth, day);
     setSelectedDateObj(newDateObj);
+    setSelectedTime(null);
   };
 
   const getDaysInMonth = (year: number, month: number) => {
@@ -205,46 +206,32 @@ export function AppointmentBooking() {
           </div>
         </div>
 
-        {/* Success Modal */}
+        {/* Success Modal (updated to match design) */}
         <div className="absolute inset-0 z-20 flex items-center justify-center p-5 pb-28 animate-in fade-in zoom-in-95 duration-300">
-          <div className="bg-white rounded-[24px] w-full max-w-sm p-6 flex flex-col items-center shadow-xl text-center max-h-[95vh] overflow-y-auto">
-            
-            <div className="w-20 h-20 bg-[#E8F8EE] rounded-full flex items-center justify-center mb-4 shrink-0">
-              <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14.6543 31.815H8.76156C8.28315 31.815 7.82433 31.6249 7.48604 31.2866C7.14775 30.9483 6.95768 30.4895 6.95768 30.0111V21.4391C6.95768 20.9606 7.14775 20.5018 7.48604 20.1635C7.82433 19.8252 8.28315 19.6352 8.76156 19.6352H14.6543C15.1327 19.6352 15.5915 19.8252 15.9298 20.1635C16.2681 20.5018 16.4582 20.9606 16.4582 21.4391V30.0111C16.4582 30.4895 16.2681 30.9483 15.9298 31.2866C15.5915 31.6249 15.1327 31.815 14.6543 31.815Z" fill="#30BE4F"/>
-                <path d="M14.2415 19.9882C15.3526 21.0963 16.3214 20.4703 16.9632 19.4678L19.4442 15.5898C19.8202 14.9961 20.0898 14.2882 20.2464 13.5604V13.5604C20.6542 11.6661 22.3789 10.3725 24.3168 10.3725V10.3725C26.1718 10.3725 27.6012 11.9688 27.4328 13.8055L26.6802 21.4395H30.4952C32.1627 21.4395 33.4842 22.8427 33.3768 24.504L32.8986 31.7915C32.8258 32.8916 31.9168 33.7297 30.8143 33.7297H17.4782" stroke="#30BE4F" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+          <div className="bg-white rounded-[20px] w-full max-w-sm p-6 flex flex-col items-center shadow-[0_20px_50px_rgba(15,23,42,0.15)] text-center max-h-[95vh] overflow-y-auto">
+            <div className="w-24 h-24 bg-[#E8F8EE] rounded-full flex items-center justify-center mb-4 shrink-0">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path fill="#22C55E" d="M7 22h6c1.1 0 2-.9 2-2v-6h3a2 2 0 0 0 1.8-1.2l1-3A2 2 0 0 0 20 7.5 4 4 0 0 0 16 4h-2.2c-.8 0-1.6.5-1.9 1.2L10 11H7c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2z" />
               </svg>
             </div>
-            
-            <h2 className="text-[24px] font-bold text-[#1C1C1C] mb-1">Awesome! 🎉</h2>
-            <p className="text-[#5C7182] text-[15px] mb-5">Here are your appointment details:</p>
-            
-            <div className="w-full bg-[#F3F4F6] rounded-[16px] p-4 mb-6 text-left space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500 text-[14px]">Date</span>
-                <span className="font-bold text-[#0D7A39] text-[14px]">{formattedSelectedDateStr}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500 text-[14px]">Time</span>
-                <span className="font-bold text-[#0D7A39] text-[14px]">{selectedTime}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500 text-[14px]">Reminder</span>
-                <span className="font-bold text-[#0D7A39] text-[14px]">{selectedReminder} Minutes before</span>
-              </div>
-            </div>
-            
-            <button 
+
+            <h2 className="text-[22px] font-extrabold text-[#111827] mb-1">Thank You !</h2>
+            <p className="text-[#374151] text-[15px] font-semibold mb-3">Your Appointment Successful</p>
+
+            <p className="text-[#6B7280] text-[13px] mb-5 px-3">You booked an appointment with <span className="font-bold text-[#111827">{doctor.name}</span> on {formattedSelectedDateStr}, at {selectedTime}.</p>
+
+            <button
               onClick={() => {
                 router.push(`/sessions/booking-details?doctorId=${doctor.id}&date=${encodeURIComponent(formattedSelectedDateStr)}&time=${encodeURIComponent(selectedTime || '')}&reminder=${selectedReminder || ''}`);
               }}
-              className="w-full bg-[#0D7A39] text-white py-3.5 rounded-xl font-semibold text-[16px] mb-3 hover:bg-[#0A602D] transition-colors shrink-0"
+              className="w-full bg-[#0D7A39] text-white py-3.5 rounded-xl font-semibold text-[16px] mb-3 hover:bg-[#0A602D] transition-colors"
             >
               Done
             </button>
-            <button 
+
+            <button
               onClick={() => setShowSuccess(false)}
-              className="text-[#5C7182] text-[14px] hover:text-[#1C1C1C] transition-colors pb-2"
+              className="text-[#6B7280] text-[14px] hover:text-[#111827] transition-colors"
             >
               Edit your appointment
             </button>
@@ -271,25 +258,27 @@ export function AppointmentBooking() {
       `}</style>
       
       {/* Header */}
-      <div className="px-5 pt-12 flex items-center relative z-10 justify-between">
-        <div className="flex items-center">
-          <button 
-            onClick={() => router.back()} 
-            className="mr-2 text-[#0D7A39] hover:bg-green-50 rounded-full transition-colors flex items-center p-1"
-          >
-            <ChevronLeft size={24} />
-          </button>
-          <h1 className="text-[#0D7A39] text-xl font-bold">Appointment</h1>
-        </div>
-        
-        <div className="relative w-20 h-10">
-          <Image 
-            src="https://i.postimg.cc/43GH2tHQ/photo-2026-05-14-14-47-12-removebg-preview.png" 
-            alt="Tabtaba Logo" 
-            fill
-            className="object-contain"
-            priority
-          />
+      <div className="px-5 pt-12 pb-10 relative z-10">
+        <div className="relative min-h-[90px]">
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => router.back()} 
+              className="text-[#0D7A39] hover:bg-green-50 rounded-full transition-colors flex items-center p-1"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            <h1 className="text-[#0D7A39] text-xl font-bold">Appointment</h1>
+          </div>
+
+          <div className="absolute left-1/2 top-0 -translate-x-1/2 w-28 h-28 sm:w-32 sm:h-32 mt-[-4px]">
+            <Image 
+              src="https://i.postimg.cc/43GH2tHQ/photo-2026-05-14-14-47-12-removebg-preview.png" 
+              alt="Tabtaba Logo" 
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
         </div>
       </div>
 
@@ -318,23 +307,6 @@ export function AppointmentBooking() {
           </div>
         </div>
       )}
-
-      {/* Selected Doctor Summary Card */}
-      <div className="mx-5 my-4 bg-white/90 backdrop-blur-md rounded-2xl p-4 flex items-center gap-4 border border-[#30C45D]/20 shadow-sm animate-in fade-in slide-in-from-top-4 duration-300">
-        <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 relative bg-gray-50 border-2 border-[#30C45D]/30">
-          <Image
-            src={doctor.imageUrl}
-            alt={doctor.name}
-            fill
-            className="object-cover"
-            sizes="56px"
-          />
-        </div>
-        <div>
-          <h2 className="font-bold text-[#1C1C1C] text-[16px] leading-tight">{doctor.name}</h2>
-          <p className="text-[#5C7182] text-[13px] font-medium">{doctor.specialty}</p>
-        </div>
-      </div>
 
       <div className="px-5 flex-1 flex flex-col">
         {/* Calendar Card */}

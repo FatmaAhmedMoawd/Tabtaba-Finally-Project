@@ -65,13 +65,7 @@ export default function KnowledgeLibraryPage() {
             </div>
           </div>
           
-          <button className="w-8 h-8 flex items-center justify-center text-[#E2E8F0]">
-            <div className="flex gap-[3px]">
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
-            </div>
-          </button>
+          <div className="w-8 h-8" aria-hidden="true" />
         </header>
 
         {/* Title */}

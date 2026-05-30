@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { 
   ArrowLeft, Bookmark, Share, Play, Maximize, 
   CheckCircle2, ChevronDown, ThumbsUp, Heart, Share2, 
-  MoreHorizontal, Upload
+  Upload
 } from 'lucide-react';
 
 export default function VideoDetailsPage() {

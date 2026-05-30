@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { 
-  MoreHorizontal,
   Wallet,
   TrendingUp,
   Clock,
@@ -61,7 +60,7 @@ export default function EarningsPage() {
             </p>
           </div>
           <div className="pt-2">
-            <MoreHorizontal className="text-[#E2E8F0]" size={28} />
+            <div className="w-10 h-10" aria-hidden="true" />
           </div>
         </motion.div>
 

@@ -17,7 +17,6 @@ import {
   Meh,
   Smile,
   Paperclip,
-  MoreHorizontal,
   Wifi,
   Timer,
   X,

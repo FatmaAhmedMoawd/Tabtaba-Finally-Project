@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Play, Wind, Moon, Music, MoreHorizontal, Activity } from 'lucide-react';
+import { ArrowLeft, Play, Wind, Moon, Music, Activity } from 'lucide-react';
 import { BottomNav } from '@/widgets/dashboard/ui/bottom-nav';
 
 const CATEGORIES = [
@@ -49,9 +49,7 @@ export default function RelaxZonePage() {
                 ))}
               </div>
             </div>
-            <button className="text-gray-400">
-              <MoreHorizontal size={24} />
-            </button>
+            <div className="w-9 h-9" aria-hidden="true" />
           </div>
 
           <div className="flex justify-between items-end">
