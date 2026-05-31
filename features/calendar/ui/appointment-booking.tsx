@@ -215,13 +215,13 @@ export function AppointmentBooking() {
             >
               <ChevronLeft size={28} strokeWidth={3} className="text-[#0D7A39]" />
             </button>
-            <h1 className="text-[#0D7A39] text-[16px] xs:text-[18px] sm:text-[24px] font-black tracking-tight leading-none">
+            <h1 className="text-[#0D7A39] text-[17px] xs:text-[19px] sm:text-[24px] font-black tracking-tight leading-none">
               Appointment
             </h1>
           </div>
 
           {/* Center: Beautiful Large Tabtaba Logo exactly centered horizontally with safe spacing on mobile */}
-          <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-14 h-14 sm:w-28 sm:h-28 z-0">
+          <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-16 h-16 sm:w-28 sm:h-28 z-0">
             <Image 
               src="https://i.postimg.cc/43GH2tHQ/photo-2026-05-14-14-47-12-removebg-preview.png" 
               alt="Tabtaba Logo" 
