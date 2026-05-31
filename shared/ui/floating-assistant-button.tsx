@@ -8,13 +8,22 @@ export function FloatingAssistantButton() {
   const pathname = usePathname();
   const router = useRouter();
 
-  // Hide the floating button on the chat page itself
-  if (pathname === '/chat') {
+  // Hide the floating button on the landing page and chat page itself
+  if (pathname === '/' || pathname === '/chat') {
     return null;
   }
 
-  // Also hide on auth and onboarding pages where it might be distracting
-  const hideOnPaths = ['/login', '/register', '/onboarding', '/forgot-password'];
+  // Also hide on auth, onboarding, support, and therapist pages where it might be distracting
+  const hideOnPaths = [
+    '/login', 
+    '/register', 
+    '/onboarding', 
+    '/forgot-password',
+    '/support',
+    '/help',
+    '/therapist',
+    '/sessions'
+  ];
   if (hideOnPaths.some(p => pathname?.startsWith(p))) {
     return null;
   }

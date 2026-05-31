@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { ArrowLeft, Play, Wind, Moon, Music, Activity } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ArrowLeft, Play, Wind, Moon, Music, Activity, Headphones } from 'lucide-react';
 import { BottomNav } from '@/widgets/dashboard/ui/bottom-nav';
 
 const CATEGORIES = [
@@ -14,8 +14,45 @@ const CATEGORIES = [
   { id: 'music', label: 'Calming Music', Icon: Music, color: 'text-blue-400', bg: 'bg-[#EFF6FF]' },
 ];
 
-export default function RelaxZonePage() {
+const EXERCISE_MAP: Record<string, {
+  title: string;
+  badge: string;
+  subtitle: string;
+  Icon: React.ComponentType<any>;
+  iconColor: string;
+  iconBg: string;
+}> = {
+  breathing: {
+    title: 'Box Breathing',
+    badge: '5 min Session',
+    subtitle: 'Box Breathing Exercise',
+    Icon: Wind,
+    iconColor: 'text-[#10B981]',
+    iconBg: 'bg-[#E6F4EA]',
+  },
+  meditation: {
+    title: 'Self-Compassion',
+    badge: '10 min Session',
+    subtitle: 'Self-Compassion Meditation',
+    Icon: Activity,
+    iconColor: 'text-[#10B981]',
+    iconBg: 'bg-[#E6F4EA]',
+  },
+  sounds: {
+    title: 'Natural Sounds',
+    badge: '20 min Session',
+    subtitle: 'Calm Nature Sounds',
+    Icon: Headphones,
+    iconColor: 'text-orange-400',
+    iconBg: 'bg-[#FFF7ED]',
+  },
+};
+
+function RelaxZoneContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const typeParam = searchParams.get('type') || 'breathing';
+  const details = EXERCISE_MAP[typeParam] || EXERCISE_MAP.breathing;
 
   return (
     <div className="min-h-screen bg-white font-inter pb-32">
@@ -42,25 +79,21 @@ export default function RelaxZonePage() {
         {/* Main Relax Zone Card */}
         <div className="bg-white rounded-[40px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 relative overflow-hidden">
           <div className="flex justify-between items-start mb-4">
-            <div className="w-14 h-14 rounded-2xl bg-[#DBEAFE] flex items-center justify-center">
-              <div className="flex flex-col gap-0.5">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="w-6 h-[2px] bg-[#3B82F6] rounded-full opacity-60" style={{ transform: `translateX(${i * 2}px)` }} />
-                ))}
-              </div>
+            <div className={`w-14 h-14 rounded-2xl ${details.iconBg} flex items-center justify-center`}>
+              <details.Icon className={`w-7 h-7 ${details.iconColor}`} />
             </div>
             <div className="w-9 h-9" aria-hidden="true" />
           </div>
 
           <div className="flex justify-between items-end">
             <div className="flex flex-col gap-2">
-              <h2 className="text-[24px] font-bold text-[#1C1C1C]">Relax Zone</h2>
+              <h2 className="text-[24px] font-bold text-[#1C1C1C]">{details.title}</h2>
               <div className="flex items-center gap-2">
                 <span className="bg-[#DCFCE7] text-[#15803D] text-[12px] font-bold px-3 py-1 rounded-full">
-                  5 min Session
+                  {details.badge}
                 </span>
               </div>
-              <p className="text-gray-500 text-[15px] mt-1 font-medium">Deep Breathing Exercise</p>
+              <p className="text-gray-500 text-[15px] mt-1 font-medium">{details.subtitle}</p>
             </div>
 
             <button className="w-14 h-14 bg-[#1E3A8A] rounded-full flex items-center justify-center shadow-lg shadow-blue-200">
@@ -87,5 +120,20 @@ export default function RelaxZonePage() {
 
       <BottomNav />
     </div>
+  );
+}
+
+export default function RelaxZonePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center font-inter">
+          <div className="w-12 h-12 border-4 border-[#10B981] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-[#10B981] font-bold">Loading Relax Zone...</p>
+        </div>
+      </div>
+    }>
+      <RelaxZoneContent />
+    </Suspense>
   );
 }

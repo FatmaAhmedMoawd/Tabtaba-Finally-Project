@@ -205,19 +205,23 @@ export function AppointmentBooking() {
       `}</style>
       
       {/* Header */}
-      <div className="px-5 pt-12 pb-10 relative z-10">
-        <div className="relative min-h-[90px]">
-          <div className="flex items-center gap-2">
+      <div className="px-5 pt-6 pb-2 relative z-10">
+        <div className="flex items-center min-h-[90px] relative w-full">
+          {/* Left Side: Back button + Appointment Title inline */}
+          <div className="flex items-center gap-1 z-10">
             <button 
               onClick={() => router.back()} 
               className="text-[#0D7A39] hover:bg-green-50 rounded-full transition-colors flex items-center p-1"
             >
-              <ChevronLeft size={24} />
+              <ChevronLeft size={28} strokeWidth={3} className="text-[#0D7A39]" />
             </button>
-            <h1 className="text-[#0D7A39] text-xl font-bold">Appointment</h1>
+            <h1 className="text-[#0D7A39] text-[24px] font-black tracking-tight leading-none">
+              Appointment
+            </h1>
           </div>
 
-          <div className="absolute left-1/2 top-0 -translate-x-1/2 w-28 h-28 sm:w-32 sm:h-32 mt-[-4px]">
+          {/* Center: Beautiful Large Tabtaba Logo exactly centered horizontally */}
+          <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-24 h-24 sm:w-28 sm:h-28 z-0">
             <Image 
               src="https://i.postimg.cc/43GH2tHQ/photo-2026-05-14-14-47-12-removebg-preview.png" 
               alt="Tabtaba Logo" 

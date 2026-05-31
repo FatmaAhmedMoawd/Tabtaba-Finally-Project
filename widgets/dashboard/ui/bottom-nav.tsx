@@ -69,26 +69,21 @@ const RelaxIcon = ({ isActive, ...props }: any) => (
     className={props.className}
   >
     <circle cx="12" cy="6" r="2" />
-    <path d="M12 8v6" />
-    <path d="M6 12c1.5-1.5 3-2 6-2s4.5.5 6 2" />
-    <path d="M3 18c2-2 4.5-2.5 9-2.5s7 1 9 2.5" />
-    <path d="M6 20h12" />
+    <path d="M12 8v5" />
+    <path d="M8 12c.5-1.5 2-2.5 4-2.5s3.5 1 4 2.5" />
+    <path d="M3 17c1.5-1.5 4.5-2 9-2s7.5.5 9 2" />
+    <path d="M6 19.5h12" />
   </svg>
 );
 
 const StatsIcon = ({ isActive, ...props }: any) => (
   <svg
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={props.strokeWidth || 2}
-    strokeLinecap="round"
-    strokeLinejoin="round"
     className={props.className}
   >
-    <line x1="6" y1="20" x2="6" y2="14" />
-    <line x1="12" y1="20" x2="12" y2="6" />
-    <line x1="18" y1="20" x2="18" y2="11" />
+    <rect x="5.5" y="10" width="3" height="9" rx="1.2" fill="currentColor" />
+    <rect x="10.5" y="4" width="3" height="15" rx="1.2" fill="currentColor" />
+    <rect x="15.5" y="12" width="3" height="7" rx="1.2" fill="currentColor" />
   </svg>
 );
 
@@ -102,8 +97,8 @@ const ProfileIcon = ({ isActive, ...props }: any) => (
     strokeLinejoin="round"
     className={props.className}
   >
-    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
+    <circle cx="12" cy="8" r="4" />
+    <path d="M6 20a6 6 0 0 1 12 0" />
   </svg>
 );
 

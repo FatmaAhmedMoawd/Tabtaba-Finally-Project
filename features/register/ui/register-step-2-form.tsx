@@ -3,7 +3,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Calendar } from 'lucide-react';
+import { Calendar, AlertCircle } from 'lucide-react';
 import { Input } from '@/shared/ui/input';
 import { Select } from '@/shared/ui/select';
 import { registerStep2Schema, type RegisterStep2FormData } from '../model/register-step-2-schema';
@@ -14,9 +14,10 @@ export const RegisterStep2Form: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<RegisterStep2FormData>({
     resolver: zodResolver(registerStep2Schema),
+    mode: 'onChange',
     defaultValues: {
       dob: '',
       gender: '',
@@ -34,6 +35,7 @@ export const RegisterStep2Form: React.FC = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-6 h-full flex-1" style={{ fontFamily: 'var(--font-inter)' }}>
       <div className="flex flex-col gap-6 flex-1">
+
           {/* Date of Birth */}
           <div>
             <label htmlFor="dob" className={labelClasses}>
@@ -66,17 +68,27 @@ export const RegisterStep2Form: React.FC = () => {
             </Select>
           </div>
 
-          {/* Secondary Consent */}
-          <div className="flex items-center justify-center gap-3 mt-6">
-            <span className="text-[15px] font-bold text-[#0D5230] shrink-0" style={{ fontFamily: 'var(--font-quicksand)' }}>
-               I agree to the Privacy Policy
-            </span>
-            <input
-              type="checkbox"
-              id="privacyConsent"
-              className="w-[18px] h-[18px] rounded-sm border-gray-400 text-[#30BE4F] focus:ring-[#30BE4F] cursor-pointer shrink-0 mt-0.5"
-              {...register('privacyConsent')}
-            />
+          {/* Privacy Consent */}
+          <div className="flex flex-col gap-2 mt-4">
+            <div className="flex items-center justify-center gap-3">
+              <span className="text-[15px] font-bold text-[#0D5230] shrink-0" style={{ fontFamily: 'var(--font-quicksand)' }}>
+                 I agree to the Privacy Policy
+              </span>
+              <input
+                type="checkbox"
+                id="privacyConsent"
+                className="w-[18px] h-[18px] rounded-sm border-gray-400 text-[#30BE4F] focus:ring-[#30BE4F] cursor-pointer shrink-0 mt-0.5"
+                {...register('privacyConsent')}
+              />
+            </div>
+            {errors.privacyConsent?.message && (
+              <div className="flex items-center justify-center gap-1.5 mt-1">
+                <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+                <p className="text-[13px] text-red-500 font-medium text-center" role="alert">
+                  {errors.privacyConsent.message}
+                </p>
+              </div>
+            )}
           </div>
       </div>
 
@@ -88,17 +100,26 @@ export const RegisterStep2Form: React.FC = () => {
             </span>
           </div>
 
-          {/* Continue Button */}
+          {/* Continue Button — disabled until form is fully valid */}
           <button
             type="submit"
-            disabled={isSubmitting}
-            className="w-full text-white rounded-[2rem] h-[58px] flex items-center justify-center text-[1.15rem] font-bold transition-all active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-[#30BE4F]/40 shadow-sm disabled:opacity-70 bg-[#30BE4F] hover:bg-[#2baa46]"
-            style={{ 
-              fontFamily: 'var(--font-inter)'
-            }}
+            disabled={isSubmitting || !isValid}
+            className={`w-full text-white rounded-[2rem] h-[58px] flex items-center justify-center text-[1.15rem] font-bold transition-all active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-[#30BE4F]/40 shadow-sm
+              ${isValid
+                ? 'bg-[#30BE4F] hover:bg-[#2baa46] cursor-pointer'
+                : 'bg-gray-300 cursor-not-allowed opacity-70'
+              }`}
+            style={{ fontFamily: 'var(--font-inter)' }}
           >
             {isSubmitting ? 'Processing...' : 'Continue'}
           </button>
+
+          {/* Global hint when form is not valid yet */}
+          {!isValid && (
+            <p className="text-center text-[13px] text-gray-400 font-medium -mt-3">
+              Please fill in all required fields to continue
+            </p>
+          )}
       </div>
 
     </form>

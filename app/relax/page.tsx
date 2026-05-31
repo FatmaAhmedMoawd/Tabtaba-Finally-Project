@@ -13,7 +13,7 @@ const EXERCISES = [
     duration: '5 min session',
     Icon: Wind,
     iconBg: 'bg-[#10B981]',
-    href: '/relax/zone',
+    href: '/relax/zone?type=breathing',
   },
   {
     id: 'meditation',
@@ -21,7 +21,7 @@ const EXERCISES = [
     duration: '10 min session',
     Icon: Activity,
     iconBg: 'bg-[#10B981]',
-    href: '/relax/zone',
+    href: '/relax/zone?type=meditation',
   },
   {
     id: 'sounds',
@@ -30,7 +30,7 @@ const EXERCISES = [
     Icon: Headphones,
     iconBg: 'bg-white border border-orange-400',
     iconColor: 'text-orange-400',
-    href: '/relax/zone',
+    href: '/relax/zone?type=sounds',
   },
   {
     id: 'journal',
