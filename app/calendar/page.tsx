@@ -1,14 +1,22 @@
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { AppointmentBooking } from '@/features/calendar/ui/appointment-booking';
+import { ActivityCalendar } from '@/features/calendar/ui/activity-calendar';
 import { BottomNav } from '@/widgets/dashboard/ui/bottom-nav';
 
 export const metadata: Metadata = {
-  title: 'Appointment - Tabtaba',
-  description: 'Book an appointment',
+  title: 'Calendar - Tabtaba',
+  description: 'Track your activities and book appointments',
 };
 
-export default function CalendarPage() {
+interface PageProps {
+  searchParams: Promise<{ doctorId?: string }>;
+}
+
+export default async function CalendarPage({ searchParams }: PageProps) {
+  const resolvedSearchParams = await searchParams;
+  const hasDoctorId = !!resolvedSearchParams.doctorId;
+
   return (
     <>
       <Suspense fallback={
@@ -19,7 +27,7 @@ export default function CalendarPage() {
           </div>
         </div>
       }>
-        <AppointmentBooking />
+        {hasDoctorId ? <AppointmentBooking /> : <ActivityCalendar />}
       </Suspense>
       <BottomNav />
     </>
