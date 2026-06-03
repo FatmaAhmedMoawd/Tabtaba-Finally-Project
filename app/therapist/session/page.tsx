@@ -250,7 +250,7 @@ export default function SessionPage() {
               <MonitorUp size={24} className="text-gray-700" />
             </button>
             <button 
-              onClick={() => router.push('/sessions/complete')}
+              onClick={() => router.push('/therapist/dashboard')}
               className="w-[68px] h-[68px] rounded-full bg-[#C82A2A] flex items-center justify-center shadow-lg shadow-red-500/20 hover:bg-[#b02525] transition-colors ml-2"
             >
               <PhoneMissed size={28} className="text-white" />
@@ -425,7 +425,7 @@ export default function SessionPage() {
           <FileText size={22} strokeWidth={2.5} />
           <span>Notes</span>
         </button>
-        <Link href="/sessions/complete" className="w-[68px] h-[68px] rounded-[24px] bg-[#C82A2A] hover:bg-[#b02525] flex items-center justify-center shrink-0 shadow-lg shadow-red-500/20 transition-all">
+        <Link href="/therapist/dashboard" className="w-[68px] h-[68px] rounded-[24px] bg-[#C82A2A] hover:bg-[#b02525] flex items-center justify-center shrink-0 shadow-lg shadow-red-500/20 transition-all">
           <PhoneMissed size={28} className="text-white" />
         </Link>
       </div>
