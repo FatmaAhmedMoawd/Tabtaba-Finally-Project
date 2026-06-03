@@ -29,7 +29,7 @@ export default async function CalendarPage({ searchParams }: PageProps) {
       }>
         {hasDoctorId ? <AppointmentBooking /> : <ActivityCalendar />}
       </Suspense>
-      <BottomNav />
+      {!hasDoctorId && <BottomNav />}
     </>
   );
 }

@@ -5,23 +5,23 @@ import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Check, Award, Flame, Brain } from 'lucide-react';
 
 // Define the static activity dots configuration for October 2023 to match the Figma mockup exactly
-const DOTS_DATA: { [key: number]: { green?: boolean; yellow?: boolean; blue?: boolean } } = {
+const DOTS_DATA: { [key: number]: { green?: boolean; yellow?: boolean; blue?: boolean; checked?: boolean } } = {
   1: { green: true },
   2: { green: true },
   3: { yellow: true },
-  4: { green: true },
+  4: {},
   5: { green: true },
-  6: { green: true, blue: true },
-  7: { green: true, blue: true }, // Day 7 selected in Figma
-  8: { yellow: true },
-  9: { green: true },
-  10: { green: true },
+  6: { checked: true },
+  7: { green: true },
+  8: {},
+  9: {},
+  10: {},
   11: { green: true },
-  12: { yellow: true },
-  13: { green: true, blue: true },
-  14: { yellow: true },
-  15: { green: true },
-  16: { green: true },
+  12: { blue: true },
+  13: { green: true },
+  14: { green: true },
+  15: { yellow: true },
+  16: {},
   17: { yellow: true },
   18: { green: true },
   19: { green: true, blue: true },
@@ -121,7 +121,7 @@ export function ActivityCalendar() {
   const getSelectedDayActivities = (day: number) => {
     const dots = DOTS_DATA[day] || {};
     const list = [];
-    if (dots.green) {
+    if (dots.green || dots.checked) {
       list.push({ title: 'Box Breathing Exercise', type: 'activity', duration: '5 min', color: '#30BE4F', icon: Flame });
       list.push({ title: 'Daily Journal Entry', type: 'activity', duration: '10 min', color: '#30BE4F', icon: Award });
     }
@@ -206,16 +206,13 @@ export function ActivityCalendar() {
           </div>
 
           {/* Monthly Days Grid */}
-          <div className="grid grid-cols-7 gap-y-3.5 gap-x-1 text-center">
+          <div className="grid grid-cols-7 gap-y-3 gap-x-1 text-center">
             {calendarDays.map((item, idx) => {
               const dots = item.isCurrentMonth ? (DOTS_DATA[item.day] || {}) : {};
               const isSelected = item.isCurrentMonth && selectedDay === item.day;
-              
-              // Special highlighted styling for Day 6 (has gray indicator in figma)
-              const isDay6 = item.isCurrentMonth && item.day === 6;
 
               return (
-                <div key={idx} className="flex flex-col items-center justify-center relative min-h-[46px]">
+                <div key={idx} className="flex items-center justify-center w-full">
                   <button
                     onClick={() => {
                       if (item.isCurrentMonth) {
@@ -223,42 +220,44 @@ export function ActivityCalendar() {
                       }
                     }}
                     disabled={!item.isCurrentMonth}
-                    className={`w-9 h-9 rounded-full flex items-center justify-center text-[14px] transition-all duration-200 font-bold relative
+                    className={`w-[42px] h-[58px] rounded-[14px] flex flex-col items-center justify-between py-2 transition-all duration-200 relative
                       ${!item.isCurrentMonth 
                         ? 'text-gray-300 cursor-not-allowed font-medium' 
                         : isSelected
-                          ? 'bg-[#30BE4F] text-white shadow-md shadow-green-500/20 scale-105 active:scale-95'
-                          : isDay6
-                            ? 'bg-[#F2F4F7] text-gray-700 hover:bg-gray-200'
-                            : 'text-[#1D214F] hover:bg-green-50/50'
+                          ? 'border-[1.5px] border-[#A8E2D1] bg-[#F2FAF7] text-[#1D214F] font-bold shadow-sm'
+                          : 'text-[#1D214F] hover:bg-green-50/50 border-[1.5px] border-transparent font-bold'
                       }`}
                   >
-                    {isSelected ? (
-                      <span className="flex items-center justify-center w-full h-full relative">
-                        {/* Selected Tick design exactly like the premium mockup */}
-                        {item.day === 7 ? (
-                          <Check size={14} strokeWidth={3} className="text-white" />
-                        ) : (
-                          item.day
-                        )}
-                      </span>
-                    ) : (
-                      item.day
-                    )}
-                  </button>
+                    {/* Day number */}
+                    <span className={`text-[14px] leading-none ${!item.isCurrentMonth ? 'text-gray-300' : 'text-[#1D214F]'}`}>
+                      {item.day}
+                    </span>
 
-                  {/* Activity Dots under the days */}
-                  <div className="flex gap-0.5 mt-1 absolute bottom-0 h-1.5 items-center justify-center w-full">
-                    {dots.green && (
-                      <span className="w-1 h-1 rounded-full bg-[#30BE4F]" />
-                    )}
-                    {dots.yellow && (
-                      <span className="w-1 h-1 rounded-full bg-[#F59E0B]" />
-                    )}
-                    {dots.blue && (
-                      <span className="w-1 h-1 rounded-full bg-[#3B82F6]" />
-                    )}
-                  </div>
+                    {/* Indicator (Dot or Checkmark) */}
+                    <div className="h-4 flex items-center justify-center w-full mb-1">
+                      {item.isCurrentMonth && (
+                        <>
+                          {dots.checked ? (
+                            <span className="w-4 h-4 rounded-full bg-[#E2F7E7] flex items-center justify-center shrink-0">
+                              <Check size={10} strokeWidth={4.5} className="text-[#30BE4F]" />
+                            </span>
+                          ) : (
+                            <>
+                              {dots.green && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#30BE4F]" />
+                              )}
+                              {!dots.green && dots.yellow && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#A16207]" />
+                              )}
+                              {!dots.green && !dots.yellow && dots.blue && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" />
+                              )}
+                            </>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </button>
                 </div>
               );
             })}

@@ -192,7 +192,7 @@ function BookingDetailsContent() {
           <div className="mx-6 mt-10 flex flex-col items-stretch gap-3">
             <button
               onClick={() => {
-                router.push(`/calendar?doctorId=${doctor.id}&date=${encodeURIComponent(selectedDateVal)}&time=${encodeURIComponent(selectedTimeVal)}&method=added`);
+                router.push('/calendar');
               }}
               className="h-[60px] rounded-full bg-[#00AC49] hover:bg-[#009E45] text-white active:scale-[0.98] transition-all font-extrabold text-[16px] tracking-wide flex items-center justify-center gap-2 shadow-[0_8px_24px_rgba(0,172,73,0.12)] cursor-pointer"
             >
@@ -207,7 +207,7 @@ function BookingDetailsContent() {
             </button>
 
             <button
-              onClick={() => router.push(`/sessions/${doctor.id}`)}
+              onClick={() => router.push('/dashboard')}
               className="mt-4 flex items-center justify-center gap-2 text-[#00AC49] hover:text-[#009E45] hover:scale-[1.03] active:scale-95 transition-all text-[16px] font-black tracking-tight"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-[#00AC49]">
