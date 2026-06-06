@@ -116,8 +116,8 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex bg-[#FAF9F6]">
       {/* Sleek Fixed Left Sidebar for Desktop */}
-      <aside className="hidden md:flex fixed top-0 left-0 h-screen w-64 bg-white border-r border-gray-100 flex-col z-50 p-6 justify-between shadow-[2px_0_20px_rgba(0,0,0,0.015)] font-inter">
-        <div className="flex flex-col gap-6 w-full">
+      <aside className="hidden md:flex fixed top-0 left-0 h-screen w-64 bg-white border-r border-gray-100 flex-col z-50 p-6 justify-between shadow-[2px_0_20px_rgba(0,0,0,0.015)] font-inter overflow-hidden">
+        <div className="flex flex-col gap-6 w-full overflow-y-auto flex-1 min-h-0 pr-1 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
           {/* Logo Section */}
           <div className="flex items-center gap-2.5 px-2">
             <div className="relative w-8 h-8 shrink-0">
