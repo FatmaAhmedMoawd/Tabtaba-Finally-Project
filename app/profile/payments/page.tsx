@@ -202,7 +202,7 @@ export default function PaymentsPage() {
       </div>
 
       {/* Plans Container */}
-      <div className="mt-8 px-6 flex flex-col gap-8 max-w-lg mx-auto relative z-10">
+      <div className="mt-8 px-6 w-full max-w-lg md:max-w-4xl mx-auto relative z-10">
         <AnimatePresence mode="wait">
           <motion.div 
             key={billingCycle}
@@ -210,7 +210,7 @@ export default function PaymentsPage() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.4 }}
-            className="flex flex-col gap-8"
+            className="flex flex-col md:grid md:grid-cols-2 gap-8 w-full"
           >
             {plans[billingCycle].map((plan, idx) => (
               <div 

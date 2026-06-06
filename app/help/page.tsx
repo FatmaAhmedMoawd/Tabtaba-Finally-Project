@@ -13,7 +13,8 @@ import {
   Phone,
   Check,
   CheckCircle2,
-  Info
+  Info,
+  ChevronLeft
 } from 'lucide-react';
 
 const HelpCard = ({ 
@@ -56,7 +57,7 @@ const HelpCard = ({
                 onFeedback('yes');
               }
             }}
-            className={`px-4 py-1.5 rounded-full text-[13px] font-bold transition-all duration-300 flex items-center gap-1 ${
+            className={`px-4 py-1.5 rounded-full text-[13px] font-bold transition-all duration-300 flex items-center gap-1 cursor-pointer ${
               feedback === 'yes' 
                 ? 'bg-[#22C55E] text-white scale-105' 
                 : 'bg-[#F3F4F6] text-gray-600 hover:bg-gray-200'
@@ -72,7 +73,7 @@ const HelpCard = ({
                 onFeedback('no');
               }
             }}
-            className={`px-4 py-1.5 rounded-full text-[13px] font-bold transition-all duration-300 ${
+            className={`px-4 py-1.5 rounded-full text-[13px] font-bold transition-all duration-300 cursor-pointer ${
               feedback === 'no' 
                 ? 'bg-[#EF4444] text-white scale-105' 
                 : 'bg-[#F3F4F6] text-gray-600 hover:bg-gray-200'
@@ -169,53 +170,118 @@ export default function HelpPage() {
         </div>
       )}
 
-      {/* Header */}
-      <div className="pt-12 px-6 flex items-center gap-3 relative z-10 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-        <button 
-          onClick={() => router.back()}
-          className="text-[#064E3B] hover:scale-110 transition-transform p-1 -ml-1"
-        >
-          <ArrowLeft size={28} strokeWidth={2.5} />
-        </button>
-        <h1 className="text-[24px] font-bold text-[#064E3B] flex items-center gap-2">
-          Help & Support
-          <HelpCircle size={24} strokeWidth={2.5} className="text-[#22C55E] ml-1" />
-        </h1>
-      </div>
+      {/* ======================================================== */}
+      {/* 1. MOBILE VIEW (Original layout preserved exactly) */}
+      {/* ======================================================== */}
+      <div className="block md:hidden">
+        {/* Header */}
+        <div className="pt-12 px-6 flex items-center gap-3 relative z-10 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <button 
+            onClick={() => router.back()}
+            className="text-[#064E3B] hover:scale-110 transition-transform p-1 -ml-1"
+          >
+            <ArrowLeft size={28} strokeWidth={2.5} />
+          </button>
+          <h1 className="text-[24px] font-bold text-[#064E3B] flex items-center gap-2">
+            Help & Support
+            <HelpCircle size={24} strokeWidth={2.5} className="text-[#22C55E] ml-1" />
+          </h1>
+        </div>
 
-      {/* FAQ Cards */}
-      <div className="mt-8 px-6 flex flex-col gap-6 relative z-10">
-        {faqs.map((item, index) => (
-          <HelpCard 
-            key={index} 
-            item={item} 
-            index={index} 
-            onFeedback={(type) => {
-              if (type === 'yes') {
-                showToast("Glad we could help! 💚", 'success');
-              } else {
-                showToast("We'll work on making this clearer! 🙏", 'info');
-              }
-            }} 
-          />
-        ))}
-      </div>
+        {/* FAQ Cards */}
+        <div className="mt-8 px-6 flex flex-col gap-6 relative z-10">
+          {faqs.map((item, index) => (
+            <HelpCard 
+              key={index} 
+              item={item} 
+              index={index} 
+              onFeedback={(type) => {
+                if (type === 'yes') {
+                  showToast("Glad we could help! 💚", 'success');
+                } else {
+                  showToast("We'll work on making this clearer! 🙏", 'info');
+                }
+              }} 
+            />
+          ))}
+        </div>
 
-      {/* Footer Contact Info */}
-      <div className="mt-10 px-6 flex flex-col items-center justify-center pb-8 animate-slide-up" style={{ animationDelay: '0.7s' }}>
-        <h2 className="text-[20px] font-bold text-[#064E3B] mb-5">Still need help?</h2>
-        
-        <div className="flex flex-col gap-4 text-[#6B7280] w-fit">
-          <div className="flex items-center gap-3 hover:text-[#22C55E] transition-colors duration-300 cursor-pointer group">
-            <Mail size={24} className="text-[#22C55E] group-hover:animate-float shrink-0" />
-            <span className="text-[16px]">support@tabtaba.com</span>
-          </div>
+        {/* Footer Contact Info */}
+        <div className="mt-10 px-6 flex flex-col items-center justify-center pb-8 animate-slide-up" style={{ animationDelay: '0.7s' }}>
+          <h2 className="text-[20px] font-bold text-[#064E3B] mb-5">Still need help?</h2>
           
-          <div className="flex items-center gap-3 hover:text-[#22C55E] transition-colors duration-300 cursor-pointer group">
-            <Phone size={24} className="text-[#22C55E] group-hover:animate-float shrink-0" />
-            <span className="text-[16px] leading-tight">+02 (800) TABTABA</span>
+          <div className="flex flex-col gap-4 text-[#6B7280] w-fit">
+            <div className="flex items-center gap-3 hover:text-[#22C55E] transition-colors duration-300 cursor-pointer group">
+              <Mail size={24} className="text-[#22C55E] group-hover:animate-float shrink-0" />
+              <span className="text-[16px]">support@tabtaba.com</span>
+            </div>
+            
+            <div className="flex items-center gap-3 hover:text-[#22C55E] transition-colors duration-300 cursor-pointer group">
+              <Phone size={24} className="text-[#22C55E] group-hover:animate-float shrink-0" />
+              <span className="text-[16px] leading-tight">+02 (800) TABTABA</span>
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* ======================================================== */}
+      {/* 2. DESKTOP VIEW (Premium web grid redesign) */}
+      {/* ======================================================== */}
+      <div className="hidden md:block w-full max-w-5xl mx-auto px-8 py-10">
+        
+        {/* Navigation & Header */}
+        <div className="flex items-center justify-between mb-8 border-b border-gray-150/40 pb-5">
+          <div className="flex items-center gap-3 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            <button 
+              onClick={() => router.back()}
+              className="flex items-center gap-2 text-gray-655 hover:text-gray-900 transition-colors font-bold text-sm bg-white border border-gray-250/60 rounded-full px-5 py-2.5 shadow-sm cursor-pointer"
+            >
+              <ChevronLeft size={16} strokeWidth={2.5} />
+              <span>Back</span>
+            </button>
+            <h1 className="text-2xl font-black text-gray-900 flex items-center gap-2">
+              Help & Support Center
+              <HelpCircle size={24} className="text-[#22C55E]" />
+            </h1>
+          </div>
+        </div>
+
+        {/* FAQ Grid Cards (2 columns on Desktop) */}
+        <div className="grid grid-cols-2 gap-8 mt-6">
+          {faqs.map((item, index) => (
+            <HelpCard 
+              key={index} 
+              item={item} 
+              index={index} 
+              onFeedback={(type) => {
+                if (type === 'yes') {
+                  showToast("Glad we could help! 💚", 'success');
+                } else {
+                  showToast("We'll work on making this clearer! 🙏", 'info');
+                }
+              }} 
+            />
+          ))}
+        </div>
+
+        {/* Footer Contact Info Card side-by-side */}
+        <div className="mt-14 bg-white border border-gray-150/50 rounded-[32px] p-8 shadow-sm flex flex-col items-center justify-center text-center max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: '0.7s' }}>
+          <h2 className="text-[22px] font-black text-[#064E3B] mb-2">Still need help?</h2>
+          <p className="text-sm text-gray-400 font-semibold mb-6">Our dedicated clinical response team is standing by to assist you.</p>
+          
+          <div className="grid grid-cols-2 gap-6 w-full max-w-lg mx-auto">
+            <div className="bg-[#FAFDFB] hover:bg-emerald-50/50 border border-emerald-50 rounded-2xl p-4 flex items-center gap-4 transition-all group cursor-pointer justify-center">
+              <Mail size={22} className="text-[#22C55E] group-hover:animate-float shrink-0" />
+              <span className="text-sm font-bold text-gray-600">support@tabtaba.com</span>
+            </div>
+            
+            <div className="bg-[#FAFDFB] hover:bg-emerald-50/50 border border-emerald-50 rounded-2xl p-4 flex items-center gap-4 transition-all group cursor-pointer justify-center">
+              <Phone size={22} className="text-[#22C55E] group-hover:animate-float shrink-0" />
+              <span className="text-sm font-bold text-gray-600">+02 (800) TABTABA</span>
+            </div>
+          </div>
+        </div>
+
       </div>
 
     </div>

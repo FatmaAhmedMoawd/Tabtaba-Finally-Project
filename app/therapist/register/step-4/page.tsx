@@ -13,7 +13,8 @@ import {
   CalendarDays,
   CheckCircle2,
   Circle,
-  Check
+  Check,
+  ChevronLeft
 } from 'lucide-react';
 
 interface DayAvailability {
@@ -64,7 +65,10 @@ export default function TherapistRegisterStep4() {
       ...prev,
       [day]: {
         ...prev[day],
-        active: !prev[day].active
+        active: !prev[day].active,
+        // Pre-fill default hours if toggled active first time and empty
+        from: prev[day].from || '09:00 AM',
+        to: prev[day].to || '05:00 PM'
       }
     }));
   };
@@ -84,167 +88,252 @@ export default function TherapistRegisterStep4() {
   }
 
   return (
-    <div className="min-h-[100dvh] bg-white font-inter relative pb-28 md:flex md:flex-col md:items-center w-full">
-      {/* Header Area */}
-      <div className="w-full relative max-w-md mx-auto md:max-w-3xl md:mt-12 bg-white pt-10 md:pt-12 pb-6 px-6 md:px-12 overflow-hidden rounded-b-[38px] md:rounded-[32px] shadow-sm shadow-gray-100/50 md:shadow-none">
-        
-        <div className="relative z-10 flex flex-col items-center">
-          <div className="relative w-20 h-16 md:hidden mb-4">
+    <div className="min-h-[100dvh] bg-[#FAF8F5] font-inter flex flex-col md:flex-row w-full">
+      
+      {/* Sidebar (Desktop only) */}
+      <aside className="hidden md:flex md:w-[320px] lg:w-[360px] shrink-0 bg-white border-r border-gray-100 flex-col p-8 justify-between select-none">
+        <div className="flex flex-col gap-10">
+          {/* Logo */}
+          <div className="relative w-36 h-14 cursor-pointer" onClick={() => router.push('/therapist')}>
             <Image
               src="https://i.postimg.cc/XvC9dkkh/photo-2026-05-14-14-47-12.jpg"
               alt="Tabtaba Logo"
               fill
-              className="object-contain mix-blend-multiply scale-[1.3]"
+              className="object-contain mix-blend-multiply"
               priority
             />
           </div>
 
-          {/* Desktop Logo Box */}
-          <div className="hidden md:flex p-6 w-32 h-32 items-center justify-center relative mb-6 rounded-2xl md:bg-white md:shadow-sm">
-             <Image
-                src="https://i.postimg.cc/XvC9dkkh/photo-2026-05-14-14-47-12.jpg"
-                alt="Tabtaba Logo"
-                fill
-                className="object-contain scale-[0.8]"
-                priority
-              />
-          </div>
-
-          <div className="flex items-center gap-2 text-[#0A9D46] mb-8 md:mb-10 lg:scale-[1.3] transform origin-center">
-            <Briefcase size={22} strokeWidth={2.5} />
-            <h1 className="text-[20px] md:text-[22px] font-extrabold tracking-tight">
-              Professional Registration
-            </h1>
-          </div>
-
-          <div className="w-full flex items-center justify-between px-6 md:px-16 lg:px-32 mb-2 lg:scale-[1.1] transform origin-left">
-             <span className="text-[#0A9D46] text-[12px] font-bold">Step 4 of 5</span>
-          </div>
-          
-          {/* Progress Bar */}
-          <div className="w-full px-6 md:px-16 lg:px-32 relative h-1 md:h-1.5 mb-2 lg:mb-4 lg:scale-[1.1] transform origin-left">
-            <div className="w-full h-1 md:h-1.5 bg-[#E2E8F0] md:bg-[#D7ECDY] rounded-full absolute top-0 left-0" />
-            <div className="h-1 md:h-1.5 bg-[#0A9D46] rounded-full absolute top-0 left-0" style={{ width: '80%' }} />
-            {/* The dot at 80% */}
-            <div className="w-3 h-3 md:w-4 md:h-4 bg-[#0A9D46] rounded-full absolute top-1/2 -translate-y-1/2 shadow-sm" style={{ left: '80%', transform: 'translate(-50%, -50%)' }} />
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-md mx-auto md:max-w-3xl px-6 pt-6 pb-12 md:pb-28 flex flex-col gap-8 md:px-12 w-full">
-        
-        {/* Do you work at a clinic? */}
-        <div className="bg-[#DDF4E4] rounded-xl p-5 flex items-center justify-between shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="relative text-[#0A9D46]">
-              <Home size={24} strokeWidth={2} />
-              <div className="absolute top-[8px] left-[7px] bg-[#DDF4E4] w-[10px] h-[10px] flex items-center justify-center">
-                 <Plus size={12} strokeWidth={3} className="text-[#0A9D46]" />
+          {/* Stepper */}
+          <div className="flex flex-col gap-6 relative pl-3">
+            <div className="absolute left-[23px] top-[15px] bottom-[15px] w-[2px] bg-gray-100" />
+            
+            {/* Step 1 */}
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-8 h-8 rounded-full bg-[#EAF6ED] text-[#0A9D46] border border-[#0A9D46]/20 flex items-center justify-center font-bold text-[13px]">
+                ✓
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[14px] font-black text-gray-900 leading-tight">Personal Info</span>
+                <span className="text-[11px] font-bold text-gray-400">Basic details</span>
               </div>
             </div>
-            <span className="font-bold text-[16px] text-gray-900 leading-tight">Do you<br/>work at a<br/>clinic?</span>
-          </div>
-          
-          <div className="flex items-center gap-4">
-             <label className="flex items-center gap-2 cursor-pointer">
-                {worksAtClinic ? (
-                   <CheckCircle2 size={24} className="text-[#0A9D46] fill-[#0A9D46] text-white" />
-                ) : (
-                   <Circle size={24} className="text-[#8997A5]" strokeWidth={1.5} />
-                )}
-                <span className="text-[15px] text-gray-800 font-medium">Yes</span>
-                <input type="radio" className="hidden" checked={worksAtClinic} onChange={() => setWorksAtClinic(true)} />
-             </label>
 
-             <label className="flex items-center gap-2 cursor-pointer">
-                {!worksAtClinic ? (
-                   <CheckCircle2 size={24} className="text-[#0A9D46] fill-[#0A9D46] text-white" />
-                ) : (
-                   <Circle size={24} className="text-[#8997A5]" strokeWidth={1.5} />
-                )}
-                <span className="text-[15px] text-gray-800 font-medium">No</span>
-                <input type="radio" className="hidden" checked={!worksAtClinic} onChange={() => setWorksAtClinic(false)} />
-             </label>
+            {/* Step 2 */}
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-8 h-8 rounded-full bg-[#EAF6ED] text-[#0A9D46] border border-[#0A9D46]/20 flex items-center justify-center font-bold text-[13px]">
+                ✓
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[14px] font-black text-gray-900 leading-tight">Education</span>
+                <span className="text-[11px] font-bold text-gray-400">Academic details</span>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-8 h-8 rounded-full bg-[#EAF6ED] text-[#0A9D46] border border-[#0A9D46]/20 flex items-center justify-center font-bold text-[13px]">
+                ✓
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[14px] font-black text-gray-900 leading-tight">Professional Info</span>
+                <span className="text-[11px] font-bold text-gray-400">Licensing & experience</span>
+              </div>
+            </div>
+
+            {/* Step 4 */}
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-8 h-8 rounded-full bg-[#0A9D46] text-white flex items-center justify-center font-bold text-[13px] shadow-md shadow-[#0A9D46]/20">
+                4
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[14px] font-black text-gray-900 leading-tight">Availability</span>
+                <span className="text-[11px] font-bold text-gray-400">Weekly schedules</span>
+              </div>
+            </div>
+
+            {/* Step 5 */}
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-8 h-8 rounded-full bg-white text-gray-400 border border-gray-100 flex items-center justify-center font-bold text-[13px]">
+                5
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[14px] font-black text-gray-400 leading-tight">Verification</span>
+                <span className="text-[11px] font-bold text-gray-400">Certificates & CV</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Session Availability */}
-        <div className="flex flex-col gap-6">
-           <div className="flex items-center gap-3">
-             <CalendarDays size={24} className="text-[#0A9D46]" strokeWidth={2} />
-             <h2 className="text-[20px] font-extrabold text-gray-900 tracking-tight">Session Availability</h2>
-           </div>
+        {/* Info Box */}
+        <div className="bg-[#FAF8F5] border border-gray-100 rounded-2xl p-4.5">
+          <span className="text-[11px] font-extrabold text-[#0D4B8D] uppercase tracking-wider">SECURED</span>
+          <p className="text-[12px] text-gray-500 font-semibold leading-relaxed mt-1">
+            Your data is stored locally and securely, ready to be reviewed by the clinical team.
+          </p>
+        </div>
+      </aside>
 
-           <div className="flex flex-col gap-8">
-              {Object.entries(availability).map(([day, data]) => (
-                <div key={day} className="flex flex-col gap-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#0D4B8D] font-bold text-[16px]">{day}</span>
-                    <button onClick={() => toggleDay(day)} className="focus:outline-none">
-                       {data.active ? (
-                          <div className="w-6 h-6 rounded-md bg-[#22C55E] flex items-center justify-center shadow-sm">
-                             <Check size={16} strokeWidth={3} className="text-white" />
-                          </div>
-                       ) : (
-                          <div className="w-6 h-6 rounded-md border border-[#8997A5] flex items-center justify-center">
-                          </div>
-                       )}
-                    </button>
-                  </div>
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-h-screen md:max-h-screen md:overflow-y-auto">
+        
+        {/* Mobile Header */}
+        <header className="md:hidden bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
+          <button onClick={() => router.back()} className="text-gray-600 hover:text-black">
+            <ChevronLeft size={24} />
+          </button>
+          <div className="relative w-24 h-10">
+            <Image
+              src="https://i.postimg.cc/XvC9dkkh/photo-2026-05-14-14-47-12.jpg"
+              alt="Tabtaba Logo"
+              fill
+              className="object-contain mix-blend-multiply"
+            />
+          </div>
+          <span className="text-xs font-bold text-[#0A9D46] bg-[#EAF6ED] px-3 py-1 rounded-full">Step 4/5</span>
+        </header>
 
-                  <div className="flex flex-col gap-4">
-                     <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-[#0A9D46] uppercase tracking-wider pl-1">From</label>
-                        <input 
-                           type="text" 
-                           value={data.from}
-                           onChange={(e) => updateTime(day, 'from', e.target.value)}
-                           disabled={!data.active}
-                           placeholder="--:-- --"
-                           className="bg-white border-0 rounded-xl px-4 py-3.5 text-[15px] font-medium text-gray-800 shadow-[0_2px_10px_rgba(0,0,0,0.02)] outline-none placeholder:text-[#BAC7D5] disabled:opacity-50"
-                        />
-                     </div>
-                     <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-[#0A9D46] uppercase tracking-wider pl-1">To</label>
-                        <input 
-                           type="text" 
-                           value={data.to}
-                           onChange={(e) => updateTime(day, 'to', e.target.value)}
-                           disabled={!data.active}
-                           placeholder="--:-- --"
-                           className="bg-white border-0 rounded-xl px-4 py-3.5 text-[15px] font-medium text-gray-800 shadow-[0_2px_10px_rgba(0,0,0,0.02)] outline-none placeholder:text-[#BAC7D5] disabled:opacity-50"
-                        />
-                     </div>
+        <div className="max-w-3xl w-full mx-auto px-6 py-8 md:py-12 flex flex-col gap-6">
+          {/* Section title & progress bar on desktop */}
+          <div className="flex flex-col gap-2">
+            <h1 className="text-[26px] md:text-[32px] font-black text-gray-900 tracking-tight leading-tight flex items-center gap-2">
+              <CalendarDays className="text-[#0A9D46]" size={32} />
+              <span>Session Availability</span>
+            </h1>
+            <p className="text-gray-500 font-semibold text-[14px] md:text-[15px] leading-relaxed">
+              Define your regular clinic practice status and weekly available time blocks for patient sessions.
+            </p>
+            
+            {/* Horizontal progress bar for desktop only */}
+            <div className="hidden md:flex flex-col gap-1.5 mt-3">
+              <div className="flex justify-between items-center text-xs text-gray-400 font-bold">
+                <span>Availability Setup</span>
+                <span>80% Complete</span>
+              </div>
+              <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                <div className="bg-[#0A9D46] h-full w-[80%] rounded-full" />
+              </div>
+            </div>
+          </div>
+
+          {/* Form Content wrapped in a premium card */}
+          <div className="bg-white border border-gray-100/80 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col gap-6">
+            
+            {/* Clinic Question */}
+            <div className="bg-[#EAF6ED]/60 border border-[#0A9D46]/10 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-xs">
+              <div className="flex items-center gap-3">
+                <div className="relative text-[#0A9D46] w-10 h-10 rounded-full bg-white border border-[#0A9D46]/15 flex items-center justify-center shrink-0 shadow-xs">
+                  <Home size={20} strokeWidth={2} />
+                  <div className="absolute -top-1 -right-1 bg-[#0A9D46] text-white w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold">
+                    +
                   </div>
                 </div>
-              ))}
-           </div>
-        </div>
+                <div className="flex flex-col">
+                  <span className="font-extrabold text-[15px] text-gray-900 leading-tight">Do you work at a clinic?</span>
+                  <span className="text-[12px] font-semibold text-gray-500 mt-0.5">Let us know if you practice offline too</span>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-5 shrink-0 pl-1">
+                 <label className="flex items-center gap-2 cursor-pointer select-none">
+                    <input type="radio" className="hidden" checked={worksAtClinic} onChange={() => setWorksAtClinic(true)} />
+                    {worksAtClinic ? (
+                       <CheckCircle2 size={22} className="text-[#0A9D46] fill-[#0A9D46] text-white" />
+                    ) : (
+                       <Circle size={22} className="text-[#BAC7D5] hover:text-[#0A9D46]" strokeWidth={2} />
+                    )}
+                    <span className="text-[14.5px] text-gray-800 font-bold">Yes</span>
+                 </label>
 
-      </div>
+                 <label className="flex items-center gap-2 cursor-pointer select-none">
+                    <input type="radio" className="hidden" checked={!worksAtClinic} onChange={() => setWorksAtClinic(false)} />
+                    {!worksAtClinic ? (
+                       <CheckCircle2 size={22} className="text-[#0A9D46] fill-[#0A9D46] text-white" />
+                    ) : (
+                       <Circle size={22} className="text-[#BAC7D5] hover:text-[#0A9D46]" strokeWidth={2} />
+                    )}
+                    <span className="text-[14.5px] text-gray-800 font-bold">No</span>
+                 </label>
+              </div>
+            </div>
 
-      {/* Floating Footer Navigation */}
-      <div className="fixed bottom-0 left-0 w-full pb-6 pt-4 px-6 z-50 md:max-w-md md:left-1/2 md:-translate-x-1/2 bg-white">
-        <div className="flex items-center justify-between w-full relative">
-          
-          {/* Back Button */}
-          <button 
-            onClick={() => router.back()} 
-            className="flex items-center gap-2 text-[#333333] hover:text-black font-extrabold text-[16px] px-2 py-3 transition-colors"
-          >
-            <ArrowLeft size={20} strokeWidth={2.5} />
-            <span>Back</span>
-          </button>
+            {/* Session Availability Details */}
+            <div className="flex flex-col gap-4.5 mt-2">
+               <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+                 <CalendarDays size={18} className="text-gray-800" strokeWidth={2.5} />
+                 <h2 className="text-[16px] font-black text-gray-900">Define Time Blocks</h2>
+               </div>
 
-          {/* Next Button */}
-          <button
-            type="button"
-            onClick={handleNext}
-            className="bg-[#00AA4F] hover:bg-[#009645] text-white px-6 py-3.5 rounded-xl flex items-center gap-3 font-bold text-[16px] shadow-[0_4px_16px_rgba(0,170,79,0.35)] transition-transform active:scale-95"
-          >
-             <span>Next Step</span>
-             <ArrowRight size={20} strokeWidth={2.5} />
-          </button>
+               <div className="flex flex-col gap-3">
+                  {Object.entries(availability).map(([day, data]) => (
+                    <div key={day} className="flex flex-col md:flex-row md:items-center justify-between gap-3.5 py-3 border-b border-gray-50 last:border-0">
+                      
+                      {/* Day toggle */}
+                      <div className="flex items-center gap-3.5 w-40 shrink-0">
+                        <button type="button" onClick={() => toggleDay(day)} className="focus:outline-none cursor-pointer">
+                           {data.active ? (
+                              <div className="w-6 h-6 rounded-md bg-[#0A9D46] flex items-center justify-center shadow-xs">
+                                 <Check size={15} strokeWidth={3} className="text-white" />
+                              </div>
+                           ) : (
+                              <div className="w-6 h-6 rounded-md border border-gray-300 hover:border-[#BAC7D5] flex items-center justify-center bg-white transition-colors" />
+                           )}
+                        </button>
+                        <span className={`text-[15.5px] font-extrabold ${data.active ? 'text-gray-900' : 'text-gray-400'}`}>{day}</span>
+                      </div>
+
+                      {/* Hours Inputs */}
+                      <div className="flex items-center gap-3.5 flex-1 max-w-md">
+                         <div className="flex-1">
+                            <input 
+                               type="text" 
+                               value={data.from}
+                               onChange={(e) => updateTime(day, 'from', e.target.value)}
+                               disabled={!data.active}
+                               placeholder="e.g. 09:00 AM"
+                               className="w-full bg-[#FAFDFE] border border-[#EBF2F9] focus:border-[#0A9D46] disabled:bg-gray-50 disabled:text-gray-300 rounded-xl px-4 py-2.5 text-[14px] font-bold text-gray-800 outline-none placeholder:text-gray-300 disabled:opacity-50 transition-colors"
+                            />
+                         </div>
+                         <span className="text-gray-400 font-bold text-[13px] shrink-0 uppercase tracking-wider">to</span>
+                         <div className="flex-1">
+                            <input 
+                               type="text" 
+                               value={data.to}
+                               onChange={(e) => updateTime(day, 'to', e.target.value)}
+                               disabled={!data.active}
+                               placeholder="e.g. 05:00 PM"
+                               className="w-full bg-[#FAFDFE] border border-[#EBF2F9] focus:border-[#0A9D46] disabled:bg-gray-50 disabled:text-gray-300 rounded-xl px-4 py-2.5 text-[14px] font-bold text-gray-800 outline-none placeholder:text-gray-300 disabled:opacity-50 transition-colors"
+                            />
+                         </div>
+                      </div>
+
+                    </div>
+                  ))}
+               </div>
+            </div>
+
+            {/* Navigation buttons contained inside the form card */}
+            <div className="flex items-center justify-between border-t border-gray-50 pt-6 mt-4">
+              <button 
+                type="button"
+                onClick={() => router.back()}
+                className="text-gray-600 hover:text-black font-extrabold text-[15px] flex items-center gap-1.5 px-3 py-2 cursor-pointer"
+              >
+                <ArrowLeft size={18} strokeWidth={2.5} />
+                <span>Back</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleNext}
+                className="bg-[#0A9D46] hover:bg-[#008c3d] text-white px-7 py-3.5 rounded-xl flex items-center gap-2 font-bold text-[15.5px] shadow-[0_4px_16px_rgba(10,157,70,0.25)] transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              >
+                 <span>Next Step</span>
+                 <ArrowRight size={18} strokeWidth={2.5} />
+              </button>
+            </div>
+
+          </div>
 
         </div>
       </div>
