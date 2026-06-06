@@ -422,7 +422,7 @@ export default function FavoritesOasisPage() {
       </div>
 
       {/* Tabs list */}
-      <div className="mt-10 px-4 max-w-lg mx-auto relative z-20">
+      <div className="mt-10 px-4 max-w-lg md:max-w-xl mx-auto relative z-20">
         <div className="bg-[#E7F2EC] p-1 rounded-3xl flex gap-1 shadow-inner relative w-full overflow-hidden">
           <button
             onClick={() => setActiveTab('sounds')}
@@ -460,7 +460,7 @@ export default function FavoritesOasisPage() {
       </div>
 
       {/* Tab Panels with animations */}
-      <div className="mt-8 px-6 max-w-lg mx-auto relative z-20">
+      <div className="mt-8 px-6 max-w-lg md:max-w-4xl lg:max-w-5xl mx-auto relative z-20">
         <AnimatePresence mode="wait">
           
           {/* TAP 1: MINDFUL SOUNDS */}
@@ -471,7 +471,7 @@ export default function FavoritesOasisPage() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -20, opacity: 0 }}
               transition={{ duration: 0.4 }}
-              className="flex flex-col gap-5"
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
             >
               {sounds.length === 0 ? (
                 <div className="bg-white/80 backdrop-blur-md rounded-3xl p-12 text-center border border-gray-100">
@@ -625,7 +625,7 @@ export default function FavoritesOasisPage() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -20, opacity: 0 }}
               transition={{ duration: 0.4 }}
-              className="flex flex-col gap-5"
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
             >
               {doctors.length === 0 ? (
                 <div className="bg-white/85 backdrop-blur-md rounded-3xl p-12 text-center border border-gray-100">

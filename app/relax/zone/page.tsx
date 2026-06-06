@@ -75,9 +75,12 @@ function RelaxZoneContent() {
         </div>
       </div>
 
-      <div className="px-6 max-w-lg mx-auto flex flex-col gap-8">
-        {/* Main Relax Zone Card */}
-        <div className="bg-white rounded-[40px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 relative overflow-hidden">
+      <div className="px-6 w-full max-w-lg md:max-w-3xl lg:max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-12 lg:gap-8 lg:items-start">
+        
+        {/* Left Column: Main Player Card */}
+        <div className="lg:col-span-7 w-full">
+          {/* Main Relax Zone Card */}
+          <div className="bg-white rounded-[40px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 relative overflow-hidden">
           <div className="flex justify-between items-start mb-4">
             <div className={`w-14 h-14 rounded-2xl ${details.iconBg} flex items-center justify-center`}>
               <details.Icon className={`w-7 h-7 ${details.iconColor}`} />
@@ -101,9 +104,12 @@ function RelaxZoneContent() {
             </button>
           </div>
         </div>
+        </div>
 
-        {/* Categories Grid */}
-        <div className="grid grid-cols-2 gap-4">
+        {/* Right Column: Categories Grid */}
+        <div className="lg:col-span-5 w-full lg:mt-0">
+          {/* Categories Grid */}
+          <div className="grid grid-cols-2 gap-4">
           {CATEGORIES.map((cat) => (
             <div
               key={cat.id}
@@ -115,6 +121,7 @@ function RelaxZoneContent() {
               <span className="text-[#1C1C1C] font-bold text-[16px]">{cat.label}</span>
             </div>
           ))}
+          </div>
         </div>
       </div>
 

@@ -180,7 +180,7 @@ export const BottomNav: React.FC = () => {
         }
       `}</style>
       
-      <nav className="fixed bottom-0 left-0 w-full bg-white px-4 sm:px-6 pb-8 pt-3 z-50 flex items-center justify-around shadow-[0_-15px_40px_rgba(0,0,0,0.06)] rounded-t-[32px] border-t border-gray-100">
+      <nav className="fixed bottom-0 left-0 w-full bg-white px-4 sm:px-6 pb-8 pt-3 z-50 flex items-center justify-around shadow-[0_-15px_40px_rgba(0,0,0,0.06)] rounded-t-[32px] border-t border-gray-100 md:hidden">
         {NAV_ITEMS.map(({ id, label, Icon, href }) => {
           const isActive = pathname === href || (id === 'home' && pathname === '/');
           

@@ -193,7 +193,7 @@ export function AppointmentBooking() {
   }
 
   return (
-    <div className="flex flex-col h-[100dvh] overflow-y-auto bg-[#EAF2F8] font-inter max-w-lg lg:max-w-xl mx-auto pb-24">
+    <div className="flex flex-col h-[100dvh] overflow-y-auto bg-[#EAF2F8] font-inter w-full max-w-lg md:max-w-3xl lg:max-w-6xl mx-auto pb-24">
       <style>{`
         .hide-scroll::-webkit-scrollbar {
           display: none;
@@ -259,8 +259,11 @@ export function AppointmentBooking() {
         </div>
       )}
 
-      <div className="px-5 flex-1 flex flex-col">
-        {/* Calendar Card */}
+      <div className="px-5 flex-1 flex flex-col lg:grid lg:grid-cols-12 lg:gap-8 lg:items-start lg:mt-6">
+        
+        {/* Left Column: Calendar selector */}
+        <div className="lg:col-span-6 w-full">
+          {/* Calendar Card */}
         <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
           <div className="bg-[#0D7A39] text-white px-5 py-3.5 flex items-center justify-between">
             <span className="font-semibold">{currentMonthStr}</span>
@@ -303,8 +306,12 @@ export function AppointmentBooking() {
           </div>
         </div>
 
-        {/* Bottom Card */}
-        <div className="bg-white rounded-t-[32px] px-5 pt-6 pb-8 mx-0 mt-auto min-h-[300px] shadow-[0_-4px_15px_rgba(0,0,0,0.02)]">
+        </div>
+
+        {/* Right Column: Time slots & booking options */}
+        <div className="lg:col-span-6 w-full lg:mt-0">
+          {/* Bottom Card */}
+          <div className="bg-white rounded-t-[32px] lg:rounded-xl px-5 pt-6 pb-8 mx-0 lg:mt-0 min-h-[300px] shadow-[0_-4px_15px_rgba(0,0,0,0.02)] lg:shadow-sm lg:border lg:border-gray-100">
           <h3 className="text-[16px] font-bold text-[#1C1C1C] mb-4">Available Time</h3>
           
           <div className="flex flex-nowrap overflow-x-auto gap-3 pb-2 -mx-5 px-5 hide-scroll">
@@ -367,6 +374,7 @@ export function AppointmentBooking() {
             Confirm
           </button>
         </div>
+      </div>
       </div>
 
       {/* Auth required Modal overlay */}

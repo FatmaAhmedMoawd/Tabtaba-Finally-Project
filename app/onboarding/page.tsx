@@ -9,31 +9,31 @@ export default function OnboardingPage() {
   return (
     <main className="min-h-[100dvh] flex flex-col items-center p-6 bg-white relative overflow-hidden">
       
-      <div className="flex-1 flex flex-col items-center justify-center w-full max-w-lg mx-auto relative z-10 mt-2 mb-8 md:mt-6">
+      <div className="flex-1 flex flex-col items-center justify-center w-full max-w-lg md:max-w-3xl mx-auto relative z-10 mt-2 mb-8 md:mt-6">
         
         {/* Logo */}
         <motion.div 
-          className="relative w-[280px] h-[280px] md:w-[320px] md:h-[320px] mb-10 md:mb-12 shrink-0 flex items-center justify-center mx-auto"
-          animate={{ y: [-15, 15, -15] }}
+          className="relative w-[240px] h-[240px] md:w-[280px] md:h-[280px] mb-14 md:mb-16 shrink-0 flex items-center justify-center mx-auto"
+          animate={{ y: [-5, 5, -5] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         >
           <Image 
             src="https://i.postimg.cc/SKKMvjL9/photo-2026-05-14-14-47-12.jpg" 
             alt="Tabtaba Logo" 
-            width={400}
-            height={400}
+            width={320}
+            height={320}
             priority 
-            className="w-full h-auto object-contain mix-blend-multiply drop-shadow-sm scale-[1.15] md:scale-[1.25]"
+            className="w-full h-auto object-contain mix-blend-multiply drop-shadow-sm"
             style={{ filter: "brightness(1.06) contrast(1.04)" }}
             referrerPolicy="no-referrer"
           />
         </motion.div>
 
         {/* Buttons */}
-        <div className="w-full max-w-[94%] md:max-w-md space-y-6">
+        <div className="w-full max-w-[94%] md:max-w-2xl flex flex-col md:flex-row space-y-6 md:space-y-0 md:gap-6 justify-center">
           <Link 
             href="/support" 
-            className="group block w-full bg-[#FF9800] hover:bg-[#F59100] text-white rounded-[44px] h-[88px] md:h-[100px] shadow-[0_12px_30px_-5px_rgba(255,152,0,0.4)] transition-all active:scale-[0.97] hover:scale-[1.01]"
+            className="group block w-full md:flex-1 bg-[#FF9800] hover:bg-[#F59100] text-white rounded-[44px] h-[88px] md:h-[100px] shadow-[0_12px_30px_-5px_rgba(255,152,0,0.4)] transition-all active:scale-[0.97] hover:scale-[1.01]"
           >
             <div className="h-full flex items-center px-4 md:px-5">
               <div className="w-[62px] h-[62px] md:w-[70px] md:h-[70px] rounded-full bg-white/20 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-300">
@@ -54,7 +54,7 @@ export default function OnboardingPage() {
 
           <Link 
             href="/therapist" 
-            className="group block w-full bg-[#30C45D] hover:bg-[#2AA950] text-white rounded-[44px] h-[88px] md:h-[100px] shadow-[0_12px_30px_-5px_rgba(48,196,93,0.4)] transition-all active:scale-[0.97] hover:scale-[1.01]"
+            className="group block w-full md:flex-1 bg-[#30C45D] hover:bg-[#2AA950] text-white rounded-[44px] h-[88px] md:h-[100px] shadow-[0_12px_30px_-5px_rgba(48,196,93,0.4)] transition-all active:scale-[0.97] hover:scale-[1.01]"
           >
             <div className="h-full flex items-center px-4 md:px-5">
               <div className="w-[62px] h-[62px] md:w-[70px] md:h-[70px] rounded-full bg-white/20 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-300">
@@ -71,8 +71,6 @@ export default function OnboardingPage() {
             </div>
           </Link>
         </div>
-
-
 
       </div>
 

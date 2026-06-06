@@ -33,7 +33,10 @@ export default function DailyExercisesPage() {
         </div>
       </div>
 
-      <div className="px-6 max-w-lg mx-auto flex flex-col gap-6">
+      <div className="px-6 w-full max-w-lg md:max-w-3xl lg:max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-12 lg:gap-8 lg:items-start">
+        
+        {/* Left Column: Info & Tabs */}
+        <div className="lg:col-span-6 flex flex-col gap-6">
         {/* Banner */}
         <div className="bg-[#99F6B4] text-[#166534] py-3 px-6 rounded-[20px] font-bold text-[13px] uppercase tracking-wider leading-snug">
           YOUR COMPANION IN THE MENTAL HEALTH JOURNEY
@@ -60,9 +63,12 @@ export default function DailyExercisesPage() {
             </button>
           ))}
         </div>
+      </div>
 
-        {/* Journal Card */}
-        <div className="bg-white rounded-[32px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-50 relative overflow-hidden flex flex-col gap-5 pt-7">
+        {/* Right Column: Journal Entry Form */}
+        <div className="lg:col-span-6 w-full">
+          {/* Journal Card */}
+          <div className="bg-white rounded-[32px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-50 relative overflow-hidden flex flex-col gap-5 pt-7">
           {/* Decorative Shape */}
           <div className="absolute top-0 right-0 w-[180px] h-[190px] bg-gradient-to-br from-[#77D489] to-[#88E49D] rounded-bl-[90px] z-0" />
           
@@ -94,6 +100,7 @@ export default function DailyExercisesPage() {
                 Save Entry
               </button>
             </div>
+          </div>
           </div>
         </div>
       </div>

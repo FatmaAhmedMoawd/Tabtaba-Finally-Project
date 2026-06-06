@@ -3,6 +3,7 @@ import { Playfair_Display, Quicksand, Inter } from 'next/font/google';
 import './globals.css'; // Global styles
 import { LanguageProvider } from '@/lib/language-context';
 import { FloatingAssistantButton } from '@/shared/ui/floating-assistant-button';
+import { LayoutWrapper } from '@/shared/ui/layout-wrapper';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -30,7 +31,9 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     <html lang="en" className={`${playfair.variable} ${quicksand.variable} ${inter.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased text-gray-900 bg-white" suppressHydrationWarning>
         <LanguageProvider>
-          {children}
+          <LayoutWrapper>
+            {children}
+          </LayoutWrapper>
           <FloatingAssistantButton />
         </LanguageProvider>
       </body>

@@ -75,7 +75,7 @@ export default function AppearancePage() {
       `}</style>
 
       {/* Header */}
-      <div className="pt-12 px-6 flex items-center gap-3 relative z-10 animate-section" style={{ animationDelay: '0.1s' }}>
+      <div className="pt-12 px-6 flex items-center gap-3 relative z-10 animate-section max-w-4xl mx-auto w-full" style={{ animationDelay: '0.1s' }}>
         <button 
           onClick={() => router.back()}
           className="text-[#064E3B] hover:scale-110 transition-transform p-1 -ml-1"
@@ -88,7 +88,7 @@ export default function AppearancePage() {
         </h1>
       </div>
 
-      <div className="px-6 mt-8 flex flex-col gap-8 relative z-10">
+      <div className="px-6 mt-8 flex flex-col gap-8 relative z-10 max-w-4xl mx-auto w-full">
 
         {/* Theme Mode Selector Section (Visual Only, Non-Functional per request: "رجعهم بس ما تشغلهمش") */}
         <div className="animate-section" style={{ animationDelay: '0.15s' }}>

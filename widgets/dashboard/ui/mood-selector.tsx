@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Heart, Sparkles, Sun, CloudRain } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 
-type Mood = 'DEPRESSED' | 'SAD' | 'NEUTRAL' | 'HAPPY';
+type Mood = 'DEPRESSED' | 'SAD' | 'NEUTRAL' | 'HAPPY' | 'EXTREMELY';
 
 const MOOD_CONTENT = {
   DEPRESSED: {
@@ -41,12 +41,22 @@ const MOOD_CONTENT = {
   HAPPY: {
     titleAr: "يا جمال ضحكتك وسعادتك! 🌟",
     titleEn: "Radiant Feelings",
-    messageAr: "ضحكتك بتنور الدنيا كلها! يا رب دايماً مبسوط وطاقتك الحلوة مالية المكان.. انشر فرحتك وبهجتك حواليك النهاردة 🎉!",
+    messageAr: "ضحكتك بتنور الدنيا كلها! يا رب دايماً مبسوط وطاقتك الحلوة مالية المكان.. انشر فرحتك بهجتك حواليك النهاردة 🎉!",
     messageEn: "Your smile lights up everything! May your beautiful energy fill the day with joy. Keep shining and spread the happiness 🎉!",
     icon: Sparkles,
     color: "#22C55E",
     bg: "bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200",
     emoji: "🌟"
+  },
+  EXTREMELY: {
+    titleAr: "طاقة وسعادة فوق الوصف! 🚀",
+    titleEn: "On Top of the World!",
+    messageAr: "طاقتك وحماسك يملأ الدنيا بهجة! كمل اليوم بكل شغف وحيوية وانشر السعادة حواليك 🌟.",
+    messageEn: "Your energy is absolutely electric! Keep shining bright and share this wonderful vibe with the world today 🌟.",
+    icon: Sparkles,
+    color: "#30BE4F",
+    bg: "bg-gradient-to-br from-green-50 to-green-100 border-green-200",
+    emoji: "🤩"
   }
 };
 
@@ -86,11 +96,21 @@ const HappyIcon = ({ className, strokeWidth }: any) => (
   </svg>
 );
 
+const ExtremelyIcon = ({ className, strokeWidth }: any) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth || 2} className={className}>
+    <circle cx="12" cy="12" r="9" />
+    <polygon points="8.5,6.2 9,7.7 10.5,7.7 9.3,8.7 9.8,10.2 8.5,9.2 7.2,10.2 7.7,8.7 6.5,7.7 8,7.7" fill="currentColor" stroke="none" />
+    <polygon points="15.5,6.2 16,7.7 17.5,7.7 16.3,8.7 16.8,10.2 15.5,9.2 14.2,10.2 14.7,8.7 13.5,7.7 15,7.7" fill="currentColor" stroke="none" />
+    <path d="M8 14 Q12 17.5 16 14" strokeLinecap="round" />
+  </svg>
+);
+
 const MOODS: { id: Mood; labelEn: string; labelAr: string; emoji: string; Icon: React.ElementType }[] = [
   { id: 'DEPRESSED', labelEn: 'DEPRESSED', labelAr: 'مُحبَط', emoji: '😭', Icon: DepressedIcon },
   { id: 'SAD', labelEn: 'SAD', labelAr: 'حزين', emoji: '😢', Icon: SadIcon },
   { id: 'NEUTRAL', labelEn: 'NEUTRAL', labelAr: 'راضي', emoji: '😐', Icon: NeutralIcon },
   { id: 'HAPPY', labelEn: 'HAPPY', labelAr: 'سعيد', emoji: '😊', Icon: HappyIcon },
+  { id: 'EXTREMELY', labelEn: 'EXTREMELY', labelAr: 'متحمس جداً', emoji: '🤩', Icon: ExtremelyIcon },
 ];
 
 export const MoodSelector: React.FC = () => {
@@ -157,38 +177,45 @@ export const MoodSelector: React.FC = () => {
   const currentMoodContent = MOOD_CONTENT[selectedMood];
 
   return (
-    <section className="w-full px-4 md:px-8 mt-4 relative">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-4 text-center sm:text-left">
-          <h2 className="text-[20px] sm:text-[22px] font-black text-[#111827] tracking-tight leading-tight" style={{ fontFamily: 'var(--font-inter)' }}>
-            mood vibe
+    <section className="w-full relative px-4 md:px-0">
+
+      {/* ─── MOBILE LAYOUT (hidden on md+) ─── */}
+      <div className="md:hidden flex flex-col items-start py-2">
+        {/* Big "mood Vibe" title - left aligned */}
+        <div className="mb-5 text-left w-full">
+          <h2 className="text-[1.75rem] font-black text-gray-900 tracking-tight leading-tight">
+            mood Vibe
           </h2>
         </div>
 
-        <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-3xl mx-auto w-full pb-6 pt-3 px-1 sm:px-0">
-          {MOODS.map(({ id, labelEn, labelAr, Icon }) => {
+        {/* 4 moods (no EXTREMELY) - left aligned row */}
+        <div className="flex items-center justify-start w-full gap-4 py-2">
+          {MOODS.filter(m => m.id !== 'EXTREMELY').map(({ id, labelEn, labelAr, Icon }) => {
             const isSelected = selectedMood === id;
             return (
               <motion.button
                 key={id}
                 whileTap={{ scale: 0.96 }}
-                whileHover={{ y: -3 }}
                 onClick={() => handleMoodSelect(id)}
-                className={`group relative flex flex-col items-center justify-center rounded-full border p-2.5 sm:p-4 min-h-[96px] sm:min-h-[132px] transition-all duration-300 text-center outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E]/40 focus-visible:ring-offset-2 ${
-                  isSelected
-                    ? 'bg-[#22C55E] text-white border-transparent shadow-[0_15px_30px_rgba(34,197,94,0.15)] sm:shadow-[0_22px_45px_rgba(34,197,94,0.18)]'
-                    : 'bg-[#F3F4F6] border-transparent text-[#6B7280] hover:bg-[#E5E7EB]'
-                }`}
+                className="group relative flex flex-col items-center gap-1.5 outline-none focus:outline-none cursor-pointer"
                 aria-pressed={isSelected}
                 aria-label={`Set mood to ${labelEn}`}
               >
-                <Icon
-                  className={`w-9 h-9 sm:w-11 sm:h-11 mb-2.5 select-none transition-colors duration-300 ${
-                    isSelected ? 'text-white' : 'text-[#6B7280] group-hover:text-slate-700'
+                <div
+                  className={`w-[65px] h-[65px] rounded-full flex items-center justify-center transition-all duration-300 ${
+                    isSelected
+                      ? 'bg-[#30BE4F] text-white shadow-[0_8px_22px_rgba(48,190,79,0.35)] scale-105'
+                      : 'bg-[#F3F4F6] text-gray-500'
                   }`}
-                  strokeWidth={2}
-                />
-                <span className={`text-[10px] sm:text-[12px] font-black tracking-wider uppercase leading-tight ${isSelected ? 'text-white' : 'text-[#6B7280]'}`}>
+                >
+                  <Icon
+                    className="w-7 h-7 select-none transition-colors duration-300"
+                    strokeWidth={isSelected ? 2.5 : 2}
+                  />
+                </div>
+                <span className={`text-[10px] font-bold tracking-wider uppercase transition-colors ${
+                  isSelected ? 'text-[#30BE4F]' : 'text-gray-500'
+                }`}>
                   {language === 'ar' ? labelAr : labelEn}
                 </span>
               </motion.button>
@@ -197,6 +224,66 @@ export const MoodSelector: React.FC = () => {
         </div>
       </div>
 
+      {/* ─── DESKTOP LAYOUT (hidden on mobile) ─── */}
+      <div className="hidden md:flex w-full bg-slate-50 border border-slate-100 rounded-[2.5rem] p-8 flex-col items-center shadow-[0_4px_20px_rgba(0,0,0,0.015)]">
+        {/* Desktop subtitle */}
+        <div className="mb-6 text-center">
+          <h2 className="text-[17px] font-black text-gray-500 tracking-[0.12em] uppercase leading-tight">
+            {language === 'ar' ? 'كيف تشعر اليوم؟' : 'How do you feel today?'}
+          </h2>
+        </div>
+
+        {/* All 5 moods */}
+        <div className="flex items-center justify-between w-full max-w-xl gap-6 py-2">
+          {MOODS.map(({ id, labelEn, labelAr, Icon }) => {
+            const isSelected = selectedMood === id;
+            return (
+              <motion.button
+                key={id}
+                whileTap={{ scale: 0.96 }}
+                whileHover={{ y: -2 }}
+                onClick={() => handleMoodSelect(id)}
+                className="group relative flex flex-col items-center gap-2 outline-none focus:outline-none cursor-pointer"
+                aria-pressed={isSelected}
+                aria-label={`Set mood to ${labelEn}`}
+              >
+                <div
+                  className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    isSelected
+                      ? 'bg-[#30BE4F] text-white shadow-[0_10px_25px_rgba(48,190,79,0.3)] scale-105'
+                      : 'bg-white text-gray-400 hover:text-gray-600 hover:bg-gray-50 border border-gray-200/70 shadow-sm'
+                  }`}
+                >
+                  <Icon
+                    className="w-10 h-10 select-none transition-colors duration-300"
+                    strokeWidth={isSelected ? 2.5 : 2}
+                  />
+                </div>
+                <span className={`text-xs font-bold tracking-wide transition-colors ${
+                  isSelected ? 'text-[#30BE4F] font-extrabold' : 'text-gray-400 group-hover:text-gray-700'
+                }`}>
+                  {language === 'ar' ? labelAr : (id === 'EXTREMELY' ? 'EXCITED' : labelEn)}
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
+
+        {/* Green pill button */}
+        <button
+          onClick={() => handleMoodSelect(selectedMood)}
+          className="mt-6 px-6 py-3 bg-[#30BE4F] hover:bg-[#28A743] text-white font-extrabold text-sm uppercase tracking-wider rounded-full shadow-lg shadow-green-500/20 hover:shadow-green-500/30 transition-all duration-300 transform active:scale-95 cursor-pointer flex items-center gap-2"
+        >
+          <span>✨</span>
+          <span>
+            {language === 'ar'
+              ? `اليوم أشعر بـ: ${currentMoodContent.titleAr}`
+              : `Today I feel: ${selectedMood === 'EXTREMELY' ? 'Extremely Happy' : (selectedMood.charAt(0) + selectedMood.slice(1).toLowerCase())}`}
+          </span>
+        </button>
+      </div>
+
+      {/* ─── Mood alert modal ─── */}
       <AnimatePresence>
         {showAlert && isMounted && (
           <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 overflow-y-auto" style={{ paddingTop: 'env(safe-area-inset-top, 12px)' }}>
@@ -255,7 +342,7 @@ export const MoodSelector: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Lightweight toast shown instead of modal when popups are suppressed */}
+      {/* ─── Lightweight toast ─── */}
       <AnimatePresence>
         {showToast && (
           <motion.div
@@ -288,3 +375,4 @@ export const MoodSelector: React.FC = () => {
     </section>
   );
 };
+

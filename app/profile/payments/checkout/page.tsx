@@ -45,7 +45,7 @@ function CheckoutContent() {
   }, [showAuthRequiredModal]);
 
   return (
-    <div className="min-h-[100dvh] bg-gradient-to-b from-[#F9FBFF] to-[#FAF8F3] font-inter pb-12 relative overflow-x-hidden">
+    <div className="min-h-[100dvh] bg-gradient-to-b from-[#F9FBFF] to-[#FAF8F3] font-inter pb-12 relative overflow-x-hidden w-full">
       {/* Header */}
       <div className="pt-8 px-6 flex items-center gap-2 relative z-10 w-full">
         <button 
@@ -57,10 +57,13 @@ function CheckoutContent() {
         <h1 className="text-[28px] font-bold text-[#30C45D]">Checkout</h1>
       </div>
 
-      <div className="px-6 mt-8">
-        <h2 className="text-[15px] font-[900] text-[#5C7182] uppercase tracking-[0.1em] mb-4">
-          ORDER SUMMARY
-        </h2>
+      <div className="w-full max-w-lg md:max-w-3xl lg:max-w-5xl mx-auto px-6 mt-8 lg:grid lg:grid-cols-12 lg:gap-8 lg:items-start">
+        
+        {/* Left Column: Order summary details */}
+        <div className="lg:col-span-6 flex flex-col w-full">
+          <h2 className="text-[15px] font-[900] text-[#5C7182] uppercase tracking-[0.1em] mb-4">
+            ORDER SUMMARY
+          </h2>
 
         {/* Order Card */}
         <div className="bg-white rounded-[32px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.03)] border border-gray-50 flex items-center justify-between mb-12">
@@ -87,8 +90,11 @@ function CheckoutContent() {
             </div>
           </div>
         </div>
+      </div>
 
-        <h2 className="text-[26px] font-black text-[#1D214F] mb-6">Payment Method</h2>
+        {/* Right Column: Payment options selection */}
+        <div className="lg:col-span-6 flex flex-col w-full mt-6 lg:mt-0">
+          <h2 className="text-[26px] font-black text-[#1D214F] mb-6">Payment Method</h2>
 
         {/* Payment Methods */}
         <div className="space-y-4">
@@ -176,6 +182,7 @@ function CheckoutContent() {
         <div className="mt-12 mb-8 flex items-center justify-center gap-2 text-gray-400 font-bold text-[13px] uppercase tracking-[0.1em]">
           <Lock size={16} className="text-[#9CA3AF]" />
           SECURED BY INDUSTRY-STANDARD ENCRYPTION
+        </div>
         </div>
       </div>
 

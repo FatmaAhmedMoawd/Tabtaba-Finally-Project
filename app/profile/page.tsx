@@ -105,8 +105,12 @@ export default function ProfilePage() {
         </button>
       </div>
 
-      {/* Profile Picture */}
-      <div className="mt-8 flex flex-col items-center justify-center relative z-10 w-full">
+      <div className="w-full max-w-lg md:max-w-3xl lg:max-w-7xl mx-auto px-4 md:px-8 mt-8 md:grid md:grid-cols-12 md:gap-8 items-start relative z-10">
+        
+        {/* Left Column: Avatar & Subscription details */}
+        <div className="md:col-span-5 flex flex-col items-center">
+          {/* Profile Picture */}
+          <div className="mt-8 flex flex-col items-center justify-center relative z-10 w-full">
         <div className="relative animate-scale-in">
           {/* Glowing background effect for Wow Factor */}
           <div className="absolute inset-0 bg-[#22C55E] rounded-full blur-xl opacity-20 animate-pulse-soft"></div>
@@ -181,10 +185,46 @@ export default function ProfilePage() {
             </p>
           </div>
         )}
-      </div>
+          </div>
 
-      {/* Menu List */}
-      <div className="mt-10 px-6 max-w-lg mx-auto flex flex-col gap-2 relative z-10">
+          {/* Testing / Active Subscription Indicator inside Left Column */}
+          <div className="mt-6 w-full bg-white/75 backdrop-blur-md rounded-[28px] p-5 border border-gray-100/80 shadow-sm flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center text-[#22C55E]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              </div>
+              <div>
+                <p className="text-[12px] font-bold text-gray-400 leading-none mb-1 uppercase tracking-wider">MEMBERSHIP</p>
+                <h3 className="text-[15px] font-[900] text-[#1D1C1C]">
+                  {subActive ? 'TBTABA Care Premium' : 'Free Standard Companion'}
+                </h3>
+              </div>
+            </div>
+            
+            <button 
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  const toggled = !subActive;
+                  localStorage.setItem('isSubscribed', toggled ? 'true' : 'false');
+                  window.dispatchEvent(new Event('storage'));
+                  setSubActive(toggled);
+                }
+              }}
+              className={`px-4 py-2 rounded-full text-[12px] font-black tracking-wider uppercase transition-all duration-300 cursor-pointer ${
+                subActive 
+                  ? 'bg-[#EAFDF5] text-[#0D7A39] hover:bg-red-50 hover:text-red-500'
+                  : 'bg-[#EBF5FB] text-[#0056D2] hover:bg-emerald-50 hover:text-[#0D7A39]'
+              }`}
+            >
+              {subActive ? 'Active' : 'Upgrade'}
+            </button>
+          </div>
+        </div>
+
+        {/* Right Column: Menu Options List */}
+        <div className="md:col-span-7 mt-10 md:mt-0 flex flex-col gap-2 w-full">
         {menuItems.map((item, index) => {
           const isLogout = item.label === 'Logout';
           return (
@@ -224,39 +264,6 @@ export default function ProfilePage() {
           );
         })}
 
-        {/* Testing / Active Subscription Indicator */}
-        <div className="mt-6 bg-white/75 backdrop-blur-md rounded-[28px] p-5 border border-gray-100/80 shadow-sm flex items-center justify-between animate-slide-up" style={{ animationDelay: '0.7s' }}>
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center text-[#22C55E]">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
-            </div>
-            <div>
-              <p className="text-[12px] font-bold text-gray-400 leading-none mb-1 uppercase tracking-wider">MEMBERSHIP</p>
-              <h3 className="text-[15px] font-[900] text-[#1D1C1C]">
-                {subActive ? 'TBTABA Care Premium' : 'Free Standard Companion'}
-              </h3>
-            </div>
-          </div>
-          
-          <button 
-            onClick={() => {
-              if (typeof window !== 'undefined') {
-                const toggled = !subActive;
-                localStorage.setItem('isSubscribed', toggled ? 'true' : 'false');
-                window.dispatchEvent(new Event('storage'));
-                setSubActive(toggled);
-              }
-            }}
-            className={`px-4 py-2 rounded-full text-[12px] font-black tracking-wider uppercase transition-all duration-300 cursor-pointer ${
-              subActive 
-                ? 'bg-[#EAFDF5] text-[#0D7A39] hover:bg-red-50 hover:text-red-500'
-                : 'bg-[#EBF5FB] text-[#0056D2] hover:bg-emerald-50 hover:text-[#0D7A39]'
-            }`}
-          >
-            {subActive ? 'Active' : 'Upgrade'}
-          </button>
         </div>
       </div>
 

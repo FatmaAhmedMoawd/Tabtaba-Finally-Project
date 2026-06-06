@@ -1,9 +1,6 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { DashboardHeader } from '@/widgets/dashboard/ui/dashboard-header';
-import { MoodSelector } from '@/widgets/dashboard/ui/mood-selector';
-import { StatsGrid } from '@/widgets/dashboard/ui/stats-grid';
-import { BottomActions } from '@/widgets/dashboard/ui/bottom-actions';
+import { DashboardClient } from './dashboard-client';
 import { BottomNav } from '@/widgets/dashboard/ui/bottom-nav';
 
 export const metadata: Metadata = {
@@ -26,25 +23,7 @@ export default function DashboardPage() {
         .animate-stagger-5 { animation: fadeInUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.7s; }
       `}</style>
 
-      <div className="w-full max-w-lg lg:max-w-4xl mx-auto flex flex-col">
-        <div className="animate-stagger-1">
-          <DashboardHeader />
-        </div>
-        
-        <div className="lg:grid lg:grid-cols-12 lg:gap-8 lg:mt-6">
-          <div className="lg:col-span-12 animate-stagger-2">
-            <MoodSelector />
-          </div>
-          
-          <div className="lg:col-span-12 animate-stagger-3 mt-4 lg:mt-0">
-            <StatsGrid />
-          </div>
-          
-          <div className="lg:col-span-12 flex justify-center animate-stagger-4 mt-4 lg:mt-0">
-            <BottomActions />
-          </div>
-        </div>
-      </div>
+      <DashboardClient />
       
       <BottomNav />
     </main>
