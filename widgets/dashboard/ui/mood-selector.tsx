@@ -225,11 +225,11 @@ export const MoodSelector: React.FC = () => {
       </div>
 
       {/* ─── DESKTOP LAYOUT (hidden on mobile) ─── */}
-      <div className="hidden md:flex w-full bg-slate-50 border border-slate-100 rounded-[2.5rem] p-8 flex-col items-center shadow-[0_4px_20px_rgba(0,0,0,0.015)]">
+      <div className="hidden md:flex w-full bg-[#C8CDD6] rounded-[2.5rem] p-8 flex-col items-center shadow-[0_4px_18px_rgba(0,0,0,0.10)]">
         {/* Desktop subtitle */}
         <div className="mb-6 text-center">
-          <h2 className="text-[17px] font-black text-gray-500 tracking-[0.12em] uppercase leading-tight">
-            {language === 'ar' ? 'كيف تشعر اليوم؟' : 'How do you feel today?'}
+          <h2 className="text-[17px] font-black text-gray-600 tracking-[0.12em] uppercase leading-tight">
+            {language === 'ar' ? 'كيف تشعر اليوم؟' : 'How does today feel?'}
           </h2>
         </div>
 
@@ -250,8 +250,8 @@ export const MoodSelector: React.FC = () => {
                 <div
                   className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 ${
                     isSelected
-                      ? 'bg-[#30BE4F] text-white shadow-[0_10px_25px_rgba(48,190,79,0.3)] scale-105'
-                      : 'bg-white text-gray-400 hover:text-gray-600 hover:bg-gray-50 border border-gray-200/70 shadow-sm'
+                      ? 'bg-[#30BE4F] text-white shadow-[0_10px_25px_rgba(48,190,79,0.35)] scale-105'
+                      : 'bg-white text-gray-400 hover:text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm'
                   }`}
                 >
                   <Icon
@@ -260,7 +260,7 @@ export const MoodSelector: React.FC = () => {
                   />
                 </div>
                 <span className={`text-xs font-bold tracking-wide transition-colors ${
-                  isSelected ? 'text-[#30BE4F] font-extrabold' : 'text-gray-400 group-hover:text-gray-700'
+                  isSelected ? 'text-[#30BE4F] font-extrabold' : 'text-gray-500 group-hover:text-gray-700'
                 }`}>
                   {language === 'ar' ? labelAr : (id === 'EXTREMELY' ? 'EXCITED' : labelEn)}
                 </span>

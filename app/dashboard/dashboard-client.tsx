@@ -52,7 +52,7 @@ export function DashboardClient() {
 
       {/* Floating Chat Button - Mobile only */}
       <Link
-        href="/chat"
+        href="/chat?bot=true"
         className="md:hidden fixed bottom-[88px] right-5 z-40 w-14 h-14 rounded-full bg-[#30BE4F] shadow-[0_6px_24px_rgba(48,190,79,0.45)] flex items-center justify-center active:scale-95 transition-transform"
         aria-label="Open AI chat"
       >

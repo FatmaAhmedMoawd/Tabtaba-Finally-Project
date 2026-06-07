@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { 
   ChevronLeft, Search, Star, Check, Calendar, Lock, 
   Video, Mic, MicOff, VideoOff, Volume2, X, Sparkles,
@@ -11,7 +11,8 @@ import {
 } from 'lucide-react';
 import { DOCTORS } from '@/features/sessions/model/doctors';
 
-const CATEGORIES = ['All Specialists', 'Anxiety', 'Depression'];
+// Specialty categories derived from actual doctor specialties
+const CATEGORIES = ['All Specialists', 'Psychiatrist', 'Child Psychiatrist', 'Senior Consultant'];
 
 const DOCTOR_SPEECHES = [
   "Hello there! Welcome to your live session. I'm Dr. Emily, and it is wonderful to have you here today. 😊",
@@ -33,8 +34,12 @@ const ARIS_SPEECHES = [
 
 export function SessionsList() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All Specialists');
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    // Will be updated in useEffect from URL params
+    return 'All Specialists';
+  });
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [showJourney, setShowJourney] = useState(false);
   const [showReminder, setShowReminder] = useState(false);
@@ -50,6 +55,20 @@ export function SessionsList() {
   const [callDoctorName, setCallDoctorName] = useState('Dr. yasser');
   const [callDoctorSpecialty, setCallDoctorSpecialty] = useState('Consultant Psychiatrist');
   const [callDoctorImage, setCallDoctorImage] = useState('https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=250');
+
+  // Read specialty filter from URL params on mount
+  useEffect(() => {
+    const specialtyParam = searchParams?.get('specialty');
+    if (specialtyParam) {
+      // Match against known categories (case-insensitive)
+      const matched = CATEGORIES.find(
+        c => c.toLowerCase() === specialtyParam.toLowerCase()
+      );
+      if (matched) {
+        setSelectedCategory(matched);
+      }
+    }
+  }, [searchParams]);
 
   // Handle 5-second countdown alert when subscription is activated
   useEffect(() => {
@@ -212,7 +231,7 @@ export function SessionsList() {
         
       const matchesCategory = 
         selectedCategory === 'All Specialists' ||
-        doctor.tags.map(t => t.toLowerCase()).includes(selectedCategory.toLowerCase());
+        doctor.specialty.toLowerCase() === selectedCategory.toLowerCase();
 
       return matchesSearch && matchesCategory;
     });
@@ -1854,8 +1873,8 @@ export function SessionsList() {
 
         {/* Filter Chips row */}
         <div className="flex flex-wrap gap-2.5 mb-8">
-          {['All Specialists', 'Anxiety', 'Depression', 'PTSD', 'ADHD', 'Child Psychiatry'].map((category) => {
-            const isSelected = selectedCategory === category || (category === 'All Specialists' && selectedCategory === 'All Specialists');
+          {CATEGORIES.map((category) => {
+            const isSelected = selectedCategory === category;
             return (
               <button
                 key={category}
@@ -1939,7 +1958,7 @@ export function SessionsList() {
                   </div>
                 </div>
                 <Link 
-                  href="/sessions/1"
+                  href="/sessions/reviews"
                   className="bg-white text-[#0D7A39] hover:bg-white/95 px-5 py-2.5 rounded-full font-bold text-xs shadow-sm transition-all active:scale-[0.98] w-fit"
                 >
                   Book Now
@@ -1971,7 +1990,7 @@ export function SessionsList() {
                   </div>
                 </div>
                 <Link 
-                  href="/sessions/2"
+                  href="/sessions/reviews"
                   className="bg-white text-gray-800 hover:bg-white/95 px-5 py-2.5 rounded-full font-bold text-xs shadow-sm transition-all active:scale-[0.98] w-fit"
                 >
                   Book Now

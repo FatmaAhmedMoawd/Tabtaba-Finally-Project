@@ -536,7 +536,7 @@ export default function StatsPage() {
         {/* Floating Chat Bubble widget at bottom right */}
         <div className="fixed bottom-6 right-6 z-40">
           <Link 
-            href="/chat"
+            href="/chat?bot=true"
             className="w-14 h-14 rounded-full bg-[#22C55E] text-white flex items-center justify-center shadow-lg hover:bg-[#1CA349] transition-all hover:scale-105 active:scale-95 cursor-pointer"
           >
             <MessageSquare size={24} strokeWidth={2.5} className="fill-current" />

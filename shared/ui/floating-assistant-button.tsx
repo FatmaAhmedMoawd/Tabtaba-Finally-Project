@@ -9,7 +9,7 @@ export function FloatingAssistantButton() {
   const router = useRouter();
 
   // Hide the floating button on the landing page and chat page itself
-  if (pathname === '/' || pathname === '/chat') {
+  if (pathname === '/' || pathname === '/chat' || pathname === '/chat/ai') {
     return null;
   }
 
@@ -21,8 +21,7 @@ export function FloatingAssistantButton() {
     '/forgot-password',
     '/support',
     '/help',
-    '/therapist',
-    '/sessions'
+    '/therapist'
   ];
   if (hideOnPaths.some(p => pathname?.startsWith(p))) {
     return null;
@@ -30,7 +29,7 @@ export function FloatingAssistantButton() {
 
   return (
     <motion.button
-      onClick={() => router.push('/chat')}
+      onClick={() => router.push('/chat/ai')}
       initial={{ scale: 0, opacity: 0 }}
       animate={{ 
         scale: 1, 

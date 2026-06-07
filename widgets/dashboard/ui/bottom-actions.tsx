@@ -10,7 +10,7 @@ export const BottomActions: React.FC = () => {
 
           {/* Talk to AI Assistant - pill only, no icon above */}
           <Link
-            href="/chat"
+          href="/chat/ai"
             className="flex items-center gap-2 bg-white border border-gray-200 rounded-full py-3 px-5 shadow-sm active:scale-[0.98] transition-transform"
           >
             <svg className="w-4 h-4 text-[#30BE4F] shrink-0" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +51,7 @@ export const BottomActions: React.FC = () => {
         
         {/* Talk to AI Assistant */}
         <Link 
-          href="/chat" 
+          href="/chat/ai" 
           className="group bg-white hover:bg-gray-50/50 border border-gray-200/80 rounded-[2.5rem] p-6 flex flex-col justify-between h-44 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer"
         >
           <div className="flex justify-between items-start">

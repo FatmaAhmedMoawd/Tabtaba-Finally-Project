@@ -5,20 +5,45 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
-  LayoutDashboard, 
   Calendar, 
   MessageSquare, 
   Banknote, 
   User, 
-  Flame, 
-  BarChart, 
+  BarChart2, 
   LogOut, 
-  Activity,
   Home,
   Settings,
   Search,
-  Stethoscope
+  BriefcaseMedical
 } from 'lucide-react';
+
+// Custom Relax / Meditation Icon matching the design
+const RelaxIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    {/* Head */}
+    <circle cx="12" cy="5" r="1.8" />
+    {/* Body */}
+    <path d="M12 7.5v4" />
+    {/* Left arm outstretched */}
+    <path d="M12 10 L6 13" />
+    {/* Right arm outstretched */}
+    <path d="M12 10 L18 13" />
+    {/* Left leg in lotus */}
+    <path d="M12 11.5 Q9 15 6 16" />
+    {/* Right leg in lotus */}
+    <path d="M12 11.5 Q15 15 18 16" />
+    {/* Base / ground line */}
+    <path d="M5 17.5 Q12 19 19 17.5" />
+  </svg>
+);
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || '';
@@ -79,12 +104,12 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
 
   // Client Navigation items matching mockup
   const CLIENT_NAV_ITEMS = [
-    { label: 'Home', icon: LayoutDashboard, href: '/dashboard' },
+    { label: 'Home', icon: Home, href: '/dashboard' },
     { label: 'Calendar', icon: Calendar, href: '/calendar' },
-    { label: 'Find Doctors', icon: Stethoscope, href: '/sessions' },
+    { label: 'Find Doctors', icon: BriefcaseMedical, href: '/sessions' },
     { label: 'Messages', icon: MessageSquare, href: '/chat' },
-    { label: 'Relax', icon: Flame, href: '/relax' },
-    { label: 'Stats', icon: BarChart, href: '/stats' },
+    { label: 'Relax', icon: RelaxIcon, href: '/relax' },
+    { label: 'Stats', icon: BarChart2, href: '/stats' },
     { label: 'Profile', icon: User, href: '/profile' },
   ];
 

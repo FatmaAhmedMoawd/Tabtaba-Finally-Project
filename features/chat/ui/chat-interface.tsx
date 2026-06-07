@@ -21,7 +21,7 @@ import {
   Moon,
   MoreVertical
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 
@@ -41,22 +41,22 @@ const MOBILE_INITIAL_MESSAGES: MobileMessage[] = [
   {
     id: '1',
     type: 'ai',
-    text: "Hello toka! I'm here to listen. How are you feeling today?",
+    text: "Hello. I’m here to provide a safe space for whatever is on your mind today. How are you feeling in this moment?",
     timestamp: '10:10 AM',
   },
   {
     id: '2',
     type: 'user',
-    text: "I'm feeling a bit stressed from work.",
+    text: "I’ve been feeling quite overwhelmed with work lately. It feels like everything is piling up at once.",
     timestamp: '10:12 AM',
     read: true,
   },
   {
     id: '3',
     type: 'ai',
-    text: "I understand. Work can be overwhelming. Would you like to try a quick breathing exercise, or just talk about what's bothering you?",
+    text: "I hear you. That feeling of “piling up” can be very heavy. Let’s try to break that down into smaller, more manageable pieces together.\n\nWould you like to try a 2-minute grounding exercise first, or should we talk through the specific tasks that are weighing on you?",
     timestamp: '10:13 AM',
-    showWidget: true,
+    showWidget: false,
   }
 ];
 
@@ -129,6 +129,16 @@ type Conversation = {
 };
 
 const INITIAL_CONVERSATIONS: Conversation[] = [
+  {
+    id: 'ai-assistant',
+    name: 'Tabtaba AI Assistant',
+    role: 'AI Coach',
+    avatar: '',
+    lastMessage: "Hello Toka! I'm here to listen. How are you feeling today?",
+    time: '10:10 AM',
+    online: true,
+    sharedFiles: [],
+  },
   {
     id: 'sarah',
     name: 'Dr. Sarah Jenkins',
@@ -216,13 +226,27 @@ export function ChatInterface() {
       const timer = setTimeout(() => {
         setMobileIsAiTyping(true);
         const aiTimer = setTimeout(() => {
+          const textLower = lastMsg.text.toLowerCase();
+          let responseText = getRandomAIResponse();
+          let showWidget = false;
+
+          if (textLower.includes('anxious') || textLower.includes('قلق')) {
+            responseText = "Anxiety can feel very heavy, but remember that it is temporary. Let's try to focus on your breathing. Would you like to try a grounding exercise, or should we talk about what is causing it?";
+          } else if (textLower.includes('sleep') || textLower.includes('نوم')) {
+            responseText = "I'm here to help you get some restful sleep. We can try a relaxing body scan exercise to ease your mind, or talk about sleep hygiene tips. What sounds best?";
+          } else if (textLower.includes('breathing') || textLower.includes('تنفس')) {
+            responseText = "Here is a quick calm breathing session to help you relax and ground yourself:";
+            showWidget = true;
+          }
+
           setMobileMessages(prev => [
             ...prev,
             {
               id: `ai-${prev.length}`,
               type: 'ai',
-              text: getRandomAIResponse(),
+              text: responseText,
               timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              showWidget
             }
           ]);
           setMobileIsAiTyping(false);
@@ -287,11 +311,49 @@ export function ChatInterface() {
   // --------------------------------------------------------
   // DESKTOP CHAT STATES & FUNCTIONS
   // --------------------------------------------------------
+  const searchParams = useSearchParams();
   const [conversations, setConversations] = useState<Conversation[]>(INITIAL_CONVERSATIONS);
   const [activeChatId, setActiveChatId] = useState('sarah');
   const [desktopInputText, setDesktopInputText] = useState('');
+  const [desktopIsAiTyping, setDesktopIsAiTyping] = useState(false);
+
+  useEffect(() => {
+    if (searchParams) {
+      if (searchParams.get('bot') === 'true' || searchParams.get('chat') === 'ai') {
+        setActiveChatId('ai-assistant');
+      } else {
+        const doctorParam = searchParams.get('doctor');
+        if (doctorParam) {
+          setActiveChatId(doctorParam);
+        } else {
+          setActiveChatId('sarah');
+        }
+      }
+    }
+  }, [searchParams]);
   
   const [messagesMap, setMessagesMap] = useState<Record<string, DesktopMessage[]>>({
+    'ai-assistant': [
+      {
+        id: '1',
+        sender: 'doctor',
+        text: "Hello. I’m here to provide a safe space for whatever is on your mind today. How are you feeling in this moment?",
+        time: '10:10 AM',
+        date: 'Today'
+      },
+      {
+        id: '2',
+        sender: 'user',
+        text: "I’ve been feeling quite overwhelmed with work lately. It feels like everything is piling up at once.",
+        time: '10:12 AM'
+      },
+      {
+        id: '3',
+        sender: 'doctor',
+        text: "I hear you. That feeling of “piling up” can be very heavy. Let’s try to break that down into smaller, more manageable pieces together.\n\nWould you like to try a 2-minute grounding exercise first, or should we talk through the specific tasks that are weighing on you?",
+        time: '10:13 AM'
+      }
+    ],
     sarah: [
       {
         id: '1',
@@ -371,6 +433,13 @@ export function ChatInterface() {
       }
       return c;
     }));
+    
+    // Sync browser URL to match current conversation selection
+    if (id === 'ai-assistant') {
+      router.push('/chat?bot=true');
+    } else {
+      router.push(`/chat?doctor=${id}`);
+    }
   };
 
   const handleDesktopSendMessage = () => {
@@ -401,30 +470,70 @@ export function ChatInterface() {
 
     setDesktopInputText('');
 
-    setTimeout(() => {
-      const doctorReply: DesktopMessage = {
-        id: (Date.now() + 1).toString(),
-        sender: 'doctor',
-        text: `Thank you for your update! Let's discuss this further in our upcoming session on ${activeChat.appointment?.day || 'our next schedule'}.`,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
+    if (activeChat.id === 'ai-assistant') {
+      setDesktopIsAiTyping(true);
+      setTimeout(() => {
+        const textLower = desktopInputText.toLowerCase();
+        let responseText = getRandomAIResponse();
 
-      setMessagesMap(prev => ({
-        ...prev,
-        [activeChat.id]: [...(prev[activeChat.id] || []), doctorReply]
-      }));
-
-      setConversations(prev => prev.map(c => {
-        if (c.id === activeChat.id) {
-          return {
-            ...c,
-            lastMessage: doctorReply.text,
-            time: doctorReply.time
-          };
+        if (textLower.includes('anxious') || textLower.includes('قلق')) {
+          responseText = "Anxiety can feel very heavy, but remember that it is temporary. Let's try to focus on your breathing. Would you like to try a grounding exercise, or should we talk about what is causing it?";
+        } else if (textLower.includes('sleep') || textLower.includes('نوم')) {
+          responseText = "I'm here to help you get some restful sleep. We can try a relaxing body scan exercise to ease your mind, or talk about sleep hygiene tips. What sounds best?";
+        } else if (textLower.includes('breathing') || textLower.includes('تنفس')) {
+          responseText = "I can guide you through a breathing session. Click the 'Breathing Exercises' action in your quick actions panel on the right to start a 2-minute calm session!";
         }
-        return c;
-      }));
-    }, 1500);
+
+        const aiReply: DesktopMessage = {
+          id: (Date.now() + 1).toString(),
+          sender: 'doctor',
+          text: responseText,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+
+        setMessagesMap(prev => ({
+          ...prev,
+          'ai-assistant': [...(prev['ai-assistant'] || []), aiReply]
+        }));
+
+        setConversations(prev => prev.map(c => {
+          if (c.id === 'ai-assistant') {
+            return {
+              ...c,
+              lastMessage: aiReply.text,
+              time: aiReply.time
+            };
+          }
+          return c;
+        }));
+        setDesktopIsAiTyping(false);
+      }, 1500);
+    } else {
+      setTimeout(() => {
+        const doctorReply: DesktopMessage = {
+          id: (Date.now() + 1).toString(),
+          sender: 'doctor',
+          text: `Thank you for your update! Let's discuss this further in our upcoming session on ${activeChat.appointment?.day || 'our next schedule'}.`,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+
+        setMessagesMap(prev => ({
+          ...prev,
+          [activeChat.id]: [...(prev[activeChat.id] || []), doctorReply]
+        }));
+
+        setConversations(prev => prev.map(c => {
+          if (c.id === activeChat.id) {
+            return {
+              ...c,
+              lastMessage: doctorReply.text,
+              time: doctorReply.time
+            };
+          }
+          return c;
+        }));
+      }, 1500);
+    }
   };
 
   return (
@@ -432,16 +541,10 @@ export function ChatInterface() {
       {/* ========================================================
           OLD MOBILE LAYOUT (Exactly as it was originally)
           ======================================================== */}
-      <div className="block md:hidden flex flex-col h-[100dvh] bg-[#FAFCFB] font-inter max-w-lg mx-auto shadow-sm relative overflow-hidden">
+      <div className="block md:hidden flex flex-col h-[100dvh] bg-gradient-to-b from-[#F0F6FA] via-[#FAF8F5] to-[#FCFAF2] font-inter max-w-lg mx-auto shadow-sm relative overflow-hidden">
         {/* Header */}
-        <header className="flex items-center justify-between px-5 py-4 bg-white sticky top-0 z-40 shadow-[0_2px_10px_rgba(0,0,0,0.03)] rounded-b-[24px]">
+        <header className="flex items-center justify-between px-5 py-4 bg-white sticky top-0 z-40 border-b border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.015)]">
           <div className="flex items-center gap-3">
-            <button 
-              onClick={() => router.back()} 
-              className="p-2 -ml-2 text-[#475569] hover:bg-[#F1F5F9] rounded-full transition-colors active:scale-95" 
-            >
-              <ChevronLeft size={22} strokeWidth={2.5} />
-            </button>
             <TabtabaAvatarIcon className="w-11 h-11" />
             <div className="flex flex-col">
               <h1 className="text-[17px] font-bold text-[#1C1C1C] leading-tight">Tabtaba AI Assistant</h1>
@@ -555,31 +658,31 @@ export function ChatInterface() {
         </div>
 
         {/* Suggestion Chips */}
-        <div className="flex flex-col items-center gap-3 px-5 mb-4">
-          <div className="flex gap-3 justify-center w-full">
+        <div className="flex flex-col items-center gap-2.5 px-5 mb-4">
+          <div className="flex gap-2.5 justify-center w-full">
             <button 
               onClick={() => handleMobileSendMessage("I'm feeling anxious")}
-              className="flex items-center gap-2 px-5 py-3 bg-white border border-[#D2E0D5] rounded-full text-[14px] font-bold text-[#3B6B10] hover:bg-gray-50 active:scale-95 transition-all shadow-sm"
+              className="flex items-center gap-2 px-4.5 py-2.5 bg-white border border-[#0D7A39]/35 rounded-full text-[13.5px] font-bold text-[#0D7A39] hover:bg-[#F4F9F6] active:scale-95 transition-all shadow-sm cursor-pointer"
             >
-              <DiamondAlert className="w-4 h-4 text-[#3B6B10]" />
+              <DiamondAlert className="w-4 h-4 text-[#0D7A39]" />
               I'm feeling anxious
             </button>
             <button 
               onClick={() => handleMobileSendMessage("Help with sleep")}
-              className="flex items-center gap-2 px-5 py-3 bg-white border border-[#D2E0D5] rounded-full text-[14px] font-bold text-[#3B6B10] hover:bg-gray-50 active:scale-95 transition-all shadow-sm"
+              className="flex items-center gap-2 px-4.5 py-2.5 bg-white border border-[#0D7A39]/35 rounded-full text-[13.5px] font-bold text-[#0D7A39] hover:bg-[#F4F9F6] active:scale-95 transition-all shadow-sm cursor-pointer"
             >
-              <Moon className="w-4 h-4 text-[#3B6B10]" />
+              <Moon className="w-4 h-4 text-[#0D7A39]" />
               Help with sleep
             </button>
           </div>
           
-          <Link 
-            href="/relax/zone"
-            className="flex items-center gap-2 px-5 py-3 bg-white border border-[#D2E0D5] rounded-full text-[14px] font-bold text-[#3B6B10] hover:bg-gray-50 active:scale-95 transition-all shadow-sm"
+          <button 
+            onClick={() => handleMobileSendMessage("Breathing exercises")}
+            className="flex items-center gap-2 px-4.5 py-2.5 bg-white border border-[#0D7A39]/35 rounded-full text-[13.5px] font-bold text-[#0D7A39] hover:bg-[#F4F9F6] active:scale-95 transition-all shadow-sm cursor-pointer"
           >
-            <WindIcon className="w-4 h-4 text-[#3B6B10]" />
+            <WindIcon className="w-4 h-4 text-[#0D7A39]" />
             Breathing exercises
-          </Link>
+          </button>
         </div>
 
         {/* Input Bar */}
@@ -721,8 +824,12 @@ export function ChatInterface() {
                   }`}
                 >
                   <div className="relative shrink-0">
-                    <div className="w-11 h-11 rounded-full overflow-hidden border border-gray-100 bg-gray-50">
-                      <Image src={item.avatar} alt={item.name} fill className="object-cover" />
+                    <div className="w-11 h-11 rounded-full overflow-hidden border border-gray-100 bg-gray-50 flex items-center justify-center relative">
+                      {item.id === 'ai-assistant' ? (
+                        <TabtabaAvatarIcon className="w-11 h-11" />
+                      ) : (
+                        <Image src={item.avatar} alt={item.name} fill className="object-cover" />
+                      )}
                     </div>
                     {item.online && (
                       <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
@@ -756,8 +863,12 @@ export function ChatInterface() {
           <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white">
             <div className="flex items-center gap-3.5">
               <div className="relative">
-                <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-100 bg-gray-50">
-                  <Image src={activeChat.avatar} alt={activeChat.name} fill className="object-cover" />
+                <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-100 bg-gray-50 flex items-center justify-center relative">
+                  {activeChat.id === 'ai-assistant' ? (
+                    <TabtabaAvatarIcon className="w-10 h-10" />
+                  ) : (
+                    <Image src={activeChat.avatar} alt={activeChat.name} fill className="object-cover" />
+                  )}
                 </div>
                 {activeChat.online && (
                   <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
@@ -807,7 +918,9 @@ export function ChatInterface() {
                             : 'bg-[#FAF7F3] text-gray-800 rounded-[24px] rounded-bl-[4px] border border-[#EBE3D7]/50'
                         }`}
                       >
-                        {msg.text}
+                        {msg.text.split('\n').map((line, i) => (
+                          <p key={i} className={i > 0 ? 'mt-2' : ''}>{line}</p>
+                        ))}
                       </div>
                       <span className={`text-[9px] text-gray-400 font-extrabold flex items-center gap-1 mt-1 ${isMe ? 'justify-end' : 'justify-start'}`}>
                         {msg.time}
@@ -818,6 +931,18 @@ export function ChatInterface() {
                 </div>
               );
             })}
+            {activeChat.id === 'ai-assistant' && desktopIsAiTyping && (
+              <div className="flex justify-start">
+                <div className="flex gap-3 items-end">
+                  <TabtabaAvatarIcon className="w-9 h-9 mb-1" />
+                  <div className="bg-[#FAF7F3] rounded-[24px] rounded-bl-[4px] border border-[#EBE3D7]/50 px-5 py-4 flex items-center gap-1 shadow-sm">
+                    <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                    <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                    <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-bounce"></span>
+                  </div>
+                </div>
+              </div>
+            )}
             <div ref={desktopChatEndRef} />
           </div>
 
@@ -853,60 +978,110 @@ export function ChatInterface() {
 
         {/* Column 3: Specialist Profile details (Right) */}
         <div className="w-1/4 bg-white rounded-[32px] border border-gray-150/70 shadow-sm p-6 flex flex-col gap-6 min-w-[280px]">
-          <div className="flex flex-col items-center text-center">
-            <div className="relative w-20 h-20 rounded-full overflow-hidden border border-gray-200 bg-gray-50 shadow-sm mb-3">
-              <Image src={activeChat.avatar} alt={activeChat.name} fill className="object-cover" />
+          {activeChat.id === 'ai-assistant' ? (
+            <div className="flex flex-col items-center text-center">
+              <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-200 bg-gray-50 flex items-center justify-center shadow-sm mb-3">
+                <TabtabaAvatarIcon className="w-20 h-20" />
+              </div>
+              <h2 className="text-base font-black text-gray-900">{activeChat.name}</h2>
+              <span className="text-[11px] text-gray-400 font-[650] leading-none mt-1">{activeChat.role}</span>
+              
+              <div className="flex gap-1.5 mt-3 justify-center">
+                <span className="text-[9px] font-black bg-green-50 text-green-600 border border-green-200 rounded-full px-2.5 py-0.5 uppercase tracking-wide">
+                  24/7 Available
+                </span>
+              </div>
             </div>
-            <h2 className="text-base font-black text-gray-900">{activeChat.name}</h2>
-            <span className="text-[11px] text-gray-400 font-[650] leading-none mt-1">{activeChat.role}</span>
-            
-            <div className="flex gap-1.5 mt-3 justify-center">
-              <span className="text-[9px] font-black bg-green-50 text-green-600 border border-green-200 rounded-full px-2.5 py-0.5 uppercase tracking-wide">
-                Active
-              </span>
-              <span className="text-[9px] font-black bg-blue-50 text-blue-600 border border-blue-200 rounded-full px-2.5 py-0.5 uppercase tracking-wide">
-                Available
-              </span>
+          ) : (
+            <div className="flex flex-col items-center text-center">
+              <div className="relative w-20 h-20 rounded-full overflow-hidden border border-gray-200 bg-gray-50 shadow-sm mb-3">
+                <Image src={activeChat.avatar} alt={activeChat.name} fill className="object-cover" />
+              </div>
+              <h2 className="text-base font-black text-gray-900">{activeChat.name}</h2>
+              <span className="text-[11px] text-gray-400 font-[650] leading-none mt-1">{activeChat.role}</span>
+              
+              <div className="flex gap-1.5 mt-3 justify-center">
+                <span className="text-[9px] font-black bg-green-50 text-green-600 border border-green-200 rounded-full px-2.5 py-0.5 uppercase tracking-wide">
+                  Active
+                </span>
+                <span className="text-[9px] font-black bg-blue-50 text-blue-600 border border-blue-200 rounded-full px-2.5 py-0.5 uppercase tracking-wide">
+                  Available
+                </span>
+              </div>
+
+              <button className="mt-4 px-4 py-2 border border-gray-200 hover:bg-gray-50 rounded-xl text-[11px] font-bold text-gray-650 transition-colors w-full cursor-pointer">
+                View Profile
+              </button>
             </div>
+          )}
 
-            <button className="mt-4 px-4 py-2 border border-gray-200 hover:bg-gray-50 rounded-xl text-[11px] font-bold text-gray-650 transition-colors w-full cursor-pointer">
-              View Profile
-            </button>
-          </div>
-
-          {/* Shared Files list */}
-          <div className="border-t border-gray-100 pt-5 flex flex-col gap-3">
-            <span className="text-[9px] font-black text-gray-400 tracking-wider uppercase">SHARED FILES</span>
-            <div className="flex flex-col gap-2">
-              {activeChat.sharedFiles.map((file, idx) => (
-                <div key={idx} className="flex justify-between items-center p-2 hover:bg-gray-50 rounded-xl transition-all cursor-pointer">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${file.type === 'pdf' ? 'bg-red-50 text-red-500' : 'bg-green-50 text-green-500'}`}>
-                      <FileText size={16} strokeWidth={2.5} />
+          {activeChat.id === 'ai-assistant' ? (
+            <div className="border-t border-gray-100 pt-5 flex flex-col gap-3">
+              <span className="text-[9px] font-black text-gray-400 tracking-wider uppercase">QUICK ACTIONS</span>
+              <div className="flex flex-col gap-2">
+                <Link 
+                  href="/relax"
+                  className="flex items-center gap-2.5 p-2 hover:bg-gray-50 rounded-xl transition-all cursor-pointer text-left"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-[#EBFDF0] text-[#30BE4F] flex items-center justify-center shrink-0">
+                    <WindIcon className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-gray-800 block leading-tight">Breathing Exercises</span>
+                    <span className="text-[9px] text-gray-400 font-bold block mt-0.5">Calm down in 2 mins</span>
+                  </div>
+                </Link>
+                <Link 
+                  href="/calendar"
+                  className="flex items-center gap-2.5 p-2 hover:bg-gray-55 rounded-xl transition-all cursor-pointer text-left"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center shrink-0">
+                    <Calendar size={16} strokeWidth={2.5} />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-gray-800 block leading-tight">Track Mood</span>
+                    <span className="text-[9px] text-gray-400 font-bold block mt-0.5">Record daily wellness</span>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Shared Files list */}
+              <div className="border-t border-gray-100 pt-5 flex flex-col gap-3">
+                <span className="text-[9px] font-black text-gray-400 tracking-wider uppercase">SHARED FILES</span>
+                <div className="flex flex-col gap-2">
+                  {activeChat.sharedFiles.map((file, idx) => (
+                    <div key={idx} className="flex justify-between items-center p-2 hover:bg-gray-55 rounded-xl transition-all cursor-pointer">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${file.type === 'pdf' ? 'bg-red-50 text-red-500' : 'bg-green-50 text-green-500'}`}>
+                          <FileText size={16} strokeWidth={2.5} />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-xs font-bold text-gray-800 truncate block leading-tight">{file.name}</span>
+                          <span className="text-[9px] text-gray-400 font-bold block mt-0.5">{file.size} &bull; {file.date}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <span className="text-xs font-bold text-gray-800 truncate block leading-tight">{file.name}</span>
-                      <span className="text-[9px] text-gray-400 font-bold block mt-0.5">{file.size} &bull; {file.date}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Upcoming appointments card */}
+              {activeChat.appointment && (
+                <div className="border-t border-gray-100 pt-5 mt-auto flex flex-col gap-3">
+                  <span className="text-[9px] font-black text-gray-400 tracking-wider uppercase">UPCOMING APPOINTMENTS</span>
+                  <div className="bg-[#E6F4F0] border border-[#d1ebe1] rounded-2xl p-4 flex gap-3 items-start shadow-sm text-left">
+                    <Calendar size={16} className="text-[#0D7A39] shrink-0 mt-0.5" strokeWidth={2.5} />
+                    <div>
+                      <span className="text-xs font-black text-[#0D7A39] block leading-none">{activeChat.appointment.day}</span>
+                      <span className="text-[10px] text-gray-500 font-bold block mt-1.5">{activeChat.appointment.time}</span>
+                      <span className="text-[9px] text-[#0D7A39] font-black uppercase tracking-wider block mt-1">{activeChat.appointment.type}</span>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Upcoming appointments card */}
-          {activeChat.appointment && (
-            <div className="border-t border-gray-100 pt-5 mt-auto flex flex-col gap-3">
-              <span className="text-[9px] font-black text-gray-400 tracking-wider uppercase">UPCOMING APPOINTMENTS</span>
-              <div className="bg-[#E6F4F0] border border-[#d1ebe1] rounded-2xl p-4 flex gap-3 items-start shadow-sm">
-                <Calendar size={16} className="text-[#0D7A39] shrink-0 mt-0.5" strokeWidth={2.5} />
-                <div>
-                  <span className="text-xs font-black text-[#0D7A39] block leading-none">{activeChat.appointment.day}</span>
-                  <span className="text-[10px] text-gray-500 font-bold block mt-1.5">{activeChat.appointment.time}</span>
-                  <span className="text-[9px] text-[#0D7A39] font-black uppercase tracking-wider block mt-1">{activeChat.appointment.type}</span>
-                </div>
-              </div>
-            </div>
+              )}
+            </>
           )}
         </div>
       </div>
