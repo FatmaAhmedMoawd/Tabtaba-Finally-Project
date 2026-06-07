@@ -112,63 +112,212 @@ export default function RelaxPage() {
   return (
     <>
       {/* ========================================================
-          OLD MOBILE LAYOUT (Exactly as it was originally)
+          MOBILE LAYOUT (Matching desktop design exactly)
           ======================================================== */}
-      <div className="block md:hidden min-h-screen bg-white font-inter pb-32">
-        {/* Header with Logo */}
-        <div className="flex flex-col items-center pt-8 pb-6">
-          <div className="relative w-44 h-24">
-            <Image
-              src="https://i.postimg.cc/D0XMhPXh/photo-2026-05-14-14-47-12.jpg"
-              alt="Tabtaba Logo"
-              fill
-              className="object-contain mix-blend-multiply scale-[1.2]"
-              priority
-            />
-          </div>
+      <div className="block md:hidden min-h-screen bg-[#FCFAF6] font-inter pb-32">
+        {/* Subheader Title Section */}
+        <div className="px-5 pt-6 pb-4">
+          <span className="text-[10px] font-black text-[#0D7A39] tracking-widest uppercase">RELAX</span>
+          <h1 className="text-[22px] font-black text-gray-900 tracking-tight leading-tight mt-1">
+            Find your inner peace
+          </h1>
+          <p className="text-gray-500 text-xs mt-1 leading-relaxed font-medium">
+            Curated sessions and articles designed to help you unwind, breathe, and restore your mental baseline.
+          </p>
         </div>
 
-        {/* Exercises List */}
-        <div className="px-6 grid grid-cols-1 gap-5 w-full max-w-lg mx-auto">
-          {MOBILE_EXERCISES.map((exercise) => (
-            <div
-              key={exercise.id}
-              className="bg-white rounded-[32px] p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 flex items-center justify-between"
+        {/* Filter Chips Row */}
+        <div className="px-5 flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-hide">
+          {FILTER_CHIPS.map((chip) => {
+            const isSelected = activeFilter === chip;
+            return (
+              <button
+                key={chip}
+                onClick={() => setActiveFilter(chip)}
+                className={`px-4 py-2 rounded-full text-[11px] font-bold transition-all duration-200 cursor-pointer whitespace-nowrap shadow-sm ${
+                  isSelected
+                    ? 'bg-[#0D7A39] text-white'
+                    : 'bg-white text-gray-600 border border-gray-100'
+                }`}
+              >
+                {chip}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="px-5 flex flex-col gap-5">
+          {/* Featured Card */}
+          <div className="bg-gradient-to-br from-[#E8F5EE] to-[#F1FAF5] rounded-[28px] p-6 border border-white shadow-sm flex flex-col justify-between relative overflow-hidden min-h-[220px]">
+            {/* Background art */}
+            <div className="absolute right-3 bottom-3 w-36 h-36 opacity-10 pointer-events-none">
+              <svg viewBox="0 0 100 100" className="w-full h-full text-[#0D7A39] fill-none" stroke="currentColor" strokeWidth="2">
+                <circle cx="50" cy="50" r="40" />
+                <path d="M50 10 C30 40, 70 40, 50 90" />
+                <path d="M10 50 C40 30, 40 70, 90 50" />
+              </svg>
+            </div>
+
+            <div className="flex justify-between items-start z-10">
+              <div>
+                <span className="bg-[#D1E7DD] text-[#0F5132] text-[9px] font-black tracking-wider px-2.5 py-1 rounded-full uppercase">
+                  FEATURED
+                </span>
+                <h2 className="text-[20px] font-black text-gray-900 leading-tight mt-2">
+                  Deep Morning Calm
+                </h2>
+                <p className="text-gray-600 text-xs mt-1.5 leading-relaxed font-medium max-w-[75%]">
+                  A guided meditation session focused on setting positive intentions and grounding your energy for the day ahead.
+                </p>
+              </div>
+              <div className="bg-white/80 backdrop-blur-md rounded-full px-2.5 py-1 flex items-center gap-1 text-[10px] font-black text-gray-600 border border-white/50 shadow-sm shrink-0">
+                <Clock size={10} strokeWidth={2.5} />
+                <span>15 MIN</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mt-5 z-10">
+              <Link
+                href="/relax/zone?type=meditation"
+                className="bg-[#0D7A39] hover:bg-[#0B6630] text-white px-5 py-3 rounded-full font-bold text-xs flex items-center gap-2 shadow-md transition-all"
+              >
+                <Play size={11} fill="currentColor" />
+                <span>Start Session</span>
+              </Link>
+              <button
+                onClick={() => setFavoriteFeatured(!favoriteFeatured)}
+                className={`w-10 h-10 rounded-full border border-gray-200/80 bg-white flex items-center justify-center transition-all cursor-pointer ${
+                  favoriteFeatured ? 'text-red-500 bg-red-50 border-red-200' : 'text-gray-400'
+                }`}
+              >
+                <Heart size={15} strokeWidth={favoriteFeatured ? 0 : 2} fill={favoriteFeatured ? 'currentColor' : 'none'} />
+              </button>
+            </div>
+          </div>
+
+          {/* Article of the Day Card */}
+          <div className="bg-[#FAF7F3] rounded-[28px] p-5 border border-[#ECE6DD] shadow-sm flex flex-col gap-3">
+            <div className="flex justify-between items-start gap-4">
+              <div className="flex-1">
+                <span className="text-[9px] font-black text-[#855D2C] tracking-wider uppercase">
+                  ARTICLE OF THE DAY
+                </span>
+                <h3 className="text-base font-black text-gray-900 leading-tight mt-1">
+                  The Science of Deep Breathing
+                </h3>
+                <p className="text-gray-500 text-xs leading-relaxed font-medium mt-1.5">
+                  Understand how controlled breathing impacts your vagus nerve and lowers stress hormones instantly.
+                </p>
+              </div>
+              <div className="relative w-16 h-16 rounded-2xl overflow-hidden shrink-0 shadow-sm border border-[#E9E1D5]">
+                <Image
+                  src="https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&q=80&w=200"
+                  alt="Leaf Image"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+            <Link
+              href="/relax/exercises"
+              className="text-[#855D2C] font-bold text-xs flex items-center gap-1.5 transition-colors"
             >
-              <div className="flex items-center gap-4">
-                <div
-                  className={`w-14 h-14 rounded-full flex items-center justify-center ${exercise.iconBg}`}
-                >
-                  <exercise.Icon
-                    className={`w-7 h-7 ${exercise.iconColor || 'text-white'}`}
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <h3 className="font-bold text-[#1C1C1C] text-[17px] leading-tight mb-1">
-                    <span className="block md:hidden">
-                      {exercise.title.split(' ').map((word, i) => (
-                        <span key={i} className="block">{word}</span>
-                      ))}
-                    </span>
-                    <span className="hidden md:inline">{exercise.title}</span>
-                  </h3>
-                  <div className="flex items-center gap-1.5 text-gray-400">
-                    <span className="text-[12px] font-medium flex items-center gap-1">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                      {exercise.duration}
+              <span>Read more</span>
+              <ArrowRight size={12} strokeWidth={2.5} />
+            </Link>
+          </div>
+
+          {/* Grid of 4 Small Exercise Cards */}
+          <div className="grid grid-cols-2 gap-4">
+            {DESKTOP_EXERCISES.map((item) => (
+              <div
+                key={item.id}
+                className="bg-white rounded-[24px] p-4 shadow-[0_4px_20px_rgb(0,0,0,0.04)] border border-gray-100/50 flex flex-col justify-between min-h-[160px]"
+              >
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center ${item.iconBg}`}>
+                      <item.Icon className={`w-4 h-4 ${item.iconColor}`} strokeWidth={2.5} />
+                    </div>
+                    <span className="text-[9px] font-black text-gray-400 tracking-wider">
+                      {item.duration}
                     </span>
                   </div>
+                  <h3 className="font-black text-gray-900 text-sm leading-tight">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-400 text-[10px] mt-1 leading-relaxed font-medium">
+                    {item.description}
+                  </p>
                 </div>
+                <Link
+                  href={item.href}
+                  className="mt-3 flex items-center justify-center gap-1 py-1.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 font-bold text-[10px] border border-gray-100 transition-colors"
+                >
+                  <Play size={8} fill="currentColor" className="mr-0.5" />
+                  <span>Play</span>
+                </Link>
+              </div>
+            ))}
+          </div>
+
+          {/* Nature Soundscapes Banner */}
+          <div className="bg-[#1A1A1A] rounded-[28px] overflow-hidden border border-[#2A2A2A] shadow-lg flex flex-col">
+            {/* Top Green Block */}
+            <div className="bg-[#22C55E] flex items-center justify-center py-8 relative overflow-hidden">
+              <svg className="w-12 h-12 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 12c4-4 8 4 12 0s8-4 10 0" />
+                <path d="M2 17c4-4 8 4 12 0s8-4 10 0" className="opacity-70" />
+                <path d="M2 7c4-4 8 4 12 0s8-4 10 0" className="opacity-45" />
+              </svg>
+            </div>
+
+            {/* Content */}
+            <div className="p-5 flex flex-col gap-4">
+              <div>
+                <h3 className="text-white font-black text-lg tracking-tight">
+                  Nature Soundscapes
+                </h3>
+                <p className="text-gray-400 text-xs mt-1.5 leading-relaxed font-medium">
+                  Immerse yourself in high-fidelity recordings of rainforests, ocean waves, and mountain winds. Perfect for focus or deep sleep.
+                </p>
               </div>
 
-              <Link
-                href={exercise.href}
-                className="bg-[#EBF5F1] text-[#0D7A39] px-6 py-3 rounded-full font-bold text-[14px] hover:bg-[#D7EDE4] transition-colors shrink-0 text-center"
-              >
-                Start<br />Now
-              </Link>
+              <div className="flex flex-col gap-2.5">
+                <Link
+                  href="/relax/zone?type=sounds"
+                  className="flex items-center justify-between gap-4 bg-[#2B2B2D]/60 hover:bg-[#3B3B3D]/80 border border-[#3A3A3D]/40 rounded-2xl px-4 py-2.5 transition-all"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <CloudRain size={15} className="text-[#22C55E]" strokeWidth={2.5} />
+                    <div>
+                      <span className="text-white text-xs font-bold block leading-none">Summer Rain</span>
+                      <span className="text-[9px] text-gray-500 font-extrabold block mt-0.5 tracking-wider uppercase">10 MIN LOOP</span>
+                    </div>
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-black shrink-0 shadow-sm">
+                    <Play size={8} fill="currentColor" className="ml-0.5" />
+                  </div>
+                </Link>
+
+                <Link
+                  href="/relax/zone?type=sounds"
+                  className="flex items-center justify-between gap-4 bg-[#2B2B2D]/60 hover:bg-[#3B3B3D]/80 border border-[#3A3A3D]/40 rounded-2xl px-4 py-2.5 transition-all"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Trees size={15} className="text-orange-400" strokeWidth={2.5} />
+                    <div>
+                      <span className="text-white text-xs font-bold block leading-none">Amazon Forest</span>
+                      <span className="text-[9px] text-gray-500 font-extrabold block mt-0.5 tracking-wider uppercase">15 MIN LOOP</span>
+                    </div>
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-black shrink-0 shadow-sm">
+                    <Play size={8} fill="currentColor" className="ml-0.5" />
+                  </div>
+                </Link>
+              </div>
             </div>
-          ))}
+          </div>
         </div>
 
         <BottomNav />

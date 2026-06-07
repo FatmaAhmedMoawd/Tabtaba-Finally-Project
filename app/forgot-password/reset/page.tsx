@@ -8,8 +8,14 @@ import { useRouter } from 'next/navigation';
 
 export default function ResetPasswordPage() {
   const router = useRouter();
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [touched, setTouched] = useState({ password: false, confirm: false });
+
+  const passwordError = touched.password && password.length > 0 && password.length < 8;
+  const confirmError = touched.confirm && confirmPassword.length > 0 && password !== confirmPassword;
 
   const handleBack = () => {
     router.back();
@@ -17,6 +23,8 @@ export default function ResetPasswordPage() {
 
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
+    setTouched({ password: true, confirm: true });
+    if (password.length < 8 || password !== confirmPassword) return;
     router.push('/forgot-password/success');
   };
 
@@ -43,7 +51,7 @@ export default function ResetPasswordPage() {
           <h2 className="text-[#30C45D] font-black text-[38px] leading-none mb-4 tracking-tight">Tabtaba</h2>
           <h3 className="text-gray-800 text-[20px] font-extrabold mb-3">Reset Password</h3>
           <p className="text-gray-500 text-[15px] font-medium leading-relaxed">
-            Create a strong, new password that you don't use for other accounts to ensure absolute security for your profile.
+            Create a strong, new password that you don&apos;t use for other accounts to ensure absolute security for your profile.
           </p>
         </div>
       </div>
@@ -78,51 +86,75 @@ export default function ResetPasswordPage() {
             {/* New Password */}
             <div className="mb-4">
               <label className="block text-[#1D2D50] text-[15px] font-medium mb-2">
-                New password
+                Password
               </label>
               <div className="relative">
                 <input 
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••••"
-                  className="w-full h-[58px] px-6 bg-[#F9FAFB] border border-[#F3F4F6] rounded-xl text-[#1D2D50] placeholder-[#BAC7D5] text-[16px] font-medium focus:outline-none focus:border-[#30C45D] focus:bg-white transition-all shadow-sm"
-                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onBlur={() => setTouched(t => ({ ...t, password: true }))}
+                  className={`w-full h-[58px] px-6 bg-[#F9FAFB] border rounded-xl text-[#1D2D50] placeholder-[#BAC7D5] text-[16px] font-medium focus:outline-none transition-all shadow-sm
+                    ${passwordError 
+                      ? 'border-red-500 focus:border-red-500' 
+                      : 'border-[#F3F4F6] focus:border-[#30C45D] focus:bg-white'
+                    }`}
                 />
                 <button 
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-5 top-1/2 -translate-y-1/2 text-[#BAC7D5] hover:text-[#1D2D50] transition-colors p-1"
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-[#BAC7D5] hover:text-[#1D2D50] transition-colors p-1 cursor-pointer"
                 >
                   {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
                 </button>
               </div>
-              <p className="mt-2 text-[#30C45D] text-[13px] font-medium">
-                Must be at least 8 characters
-              </p>
+              {passwordError ? (
+                <p className="mt-2 text-red-500 text-[13px] font-medium">
+                  Password must be at least 8 characters
+                </p>
+              ) : (
+                <p className="mt-2 text-[#30C45D] text-[13px] font-medium">
+                  Must be at least 8 characters
+                </p>
+              )}
             </div>
 
             {/* Confirm Password */}
             <div className="mb-6">
               <label className="block text-[#1D2D50] text-[15px] font-medium mb-2">
-                Confirm password
+                confirm Password
               </label>
               <div className="relative">
                 <input 
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="••••••••••"
-                  className="w-full h-[58px] px-6 bg-[#F9FAFB] border border-[#F3F4F6] rounded-xl text-[#1D2D50] placeholder-[#BAC7D5] text-[16px] font-medium focus:outline-none focus:border-[#30C45D] focus:bg-white transition-all shadow-sm"
-                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onBlur={() => setTouched(t => ({ ...t, confirm: true }))}
+                  className={`w-full h-[58px] px-6 bg-[#F9FAFB] border rounded-xl text-[#1D2D50] placeholder-[#BAC7D5] text-[16px] font-medium focus:outline-none transition-all shadow-sm
+                    ${confirmError 
+                      ? 'border-red-500 focus:border-red-500' 
+                      : 'border-[#F3F4F6] focus:border-[#30C45D] focus:bg-white'
+                    }`}
                 />
                 <button 
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-5 top-1/2 -translate-y-1/2 text-[#BAC7D5] hover:text-[#1D2D50] transition-colors p-1"
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-[#BAC7D5] hover:text-[#1D2D50] transition-colors p-1 cursor-pointer"
                 >
                   {showConfirmPassword ? <EyeOff size={22} /> : <Eye size={22} />}
                 </button>
               </div>
-              <p className="mt-2 text-[#30C45D] text-[13px] font-medium">
-                Both passwords must match
-              </p>
+              {confirmError ? (
+                <p className="mt-2 text-red-500 text-[13px] font-medium">
+                  Passwords do not match
+                </p>
+              ) : (
+                <p className="mt-2 text-[#30C45D] text-[13px] font-medium">
+                  Both passwords must match
+                </p>
+              )}
             </div>
 
             {/* Verify Account Button */}

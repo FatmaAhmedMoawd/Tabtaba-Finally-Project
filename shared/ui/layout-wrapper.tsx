@@ -13,8 +13,8 @@ import {
   LogOut, 
   Home,
   Settings,
-  Search,
-  BriefcaseMedical
+  BriefcaseMedical,
+  Bell
 } from 'lucide-react';
 
 // Custom Relax / Meditation Icon matching the design
@@ -210,33 +210,31 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
       <div className={`flex-1 flex flex-col w-full min-h-screen bg-[#FCFAF6] ${isClientDashboard || isTherapistDashboard ? 'md:pl-64' : ''}`}>
         {/* Top Header Bar */}
         {(isClientDashboard || isTherapistDashboard) && (
-          <header className="hidden md:flex items-center justify-between px-8 py-4 bg-[#FCFAF6] z-40">
-            {/* Search Input Box */}
-            <div className="flex-1 max-w-xl">
-              <div className="relative flex items-center bg-white rounded-full px-5 py-2.5 border border-gray-150/70 shadow-sm focus-within:shadow-md transition-shadow">
-                <Search className="w-4 h-4 text-gray-400 mr-2" />
-                <input 
-                  type="text" 
-                  placeholder="Search sessions, doctors, exercises, articles..." 
-                  className="bg-transparent border-none outline-none text-sm text-gray-850 placeholder:text-gray-400 w-full"
-                />
-              </div>
-            </div>
-
+          <header className="hidden md:flex items-center justify-end px-8 py-4 bg-[#FCFAF6] z-40">
             {/* Right-side elements */}
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4">
+              {/* Notifications Bell */}
+              <Link
+                href="/notifications"
+                className="relative w-9 h-9 flex items-center justify-center text-gray-400 hover:text-[#0D7A39] hover:bg-gray-100 rounded-xl transition-all cursor-pointer"
+                aria-label="Notifications"
+              >
+                <Bell className="w-5 h-5" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
+              </Link>
+
               {/* Settings Gear Icon */}
-              <button className="text-gray-400 hover:text-gray-650 transition-colors cursor-pointer">
+              <Link href="/settings" className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-[#0D7A39] hover:bg-gray-100 rounded-xl transition-all cursor-pointer" aria-label="Settings">
                 <Settings className="w-5 h-5" />
-              </button>
+              </Link>
 
               {/* User Account Info */}
-              <div className="flex items-center gap-3">
+              <Link href="/profile" className="flex items-center gap-3 group">
                 <div className="text-right hidden sm:block">
-                  <div className="text-sm font-bold text-gray-850">{fullName}</div>
+                  <div className="text-sm font-bold text-gray-850 group-hover:text-[#0D7A39] transition-colors">{fullName}</div>
                   <div className="text-xs text-gray-455">Personal account</div>
                 </div>
-                <div className="relative w-9 h-9 rounded-full overflow-hidden border border-gray-200 shrink-0">
+                <div className="relative w-9 h-9 rounded-full overflow-hidden border border-gray-200 shrink-0 group-hover:border-[#0D7A39] transition-colors">
                   <Image 
                     src="https://randomuser.me/api/portraits/women/44.jpg" 
                     alt="User Profile Photo" 
@@ -244,7 +242,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
                     className="object-cover" 
                   />
                 </div>
-              </div>
+              </Link>
             </div>
           </header>
         )}

@@ -45,6 +45,7 @@ export function SessionsList() {
   const [showReminder, setShowReminder] = useState(false);
   const [showFiveSecAlert, setShowFiveSecAlert] = useState(false);
   const [showFiftyPercentPage, setShowFiftyPercentPage] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState<typeof DOCTORS[0] | null>(null);
 
   // High-Fidelity "Get Ready for your Session" Screen States
   const [showGetReady, setShowGetReady] = useState(false);
@@ -1785,7 +1786,11 @@ export function SessionsList() {
         <div className="flex-1 pt-4 flex flex-col gap-5">
           {filteredDoctors.length > 0 ? (
             filteredDoctors.map((doctor) => (
-              <div key={doctor.id} className="bg-white rounded-[24px] p-4 shadow-sm border border-gray-50 flex flex-col">
+              <div
+                key={doctor.id}
+                className="bg-white rounded-[24px] p-4 shadow-sm border border-gray-50 flex flex-col cursor-pointer hover:shadow-md transition-shadow"
+                onClick={() => router.push(`/sessions/${doctor.id}`)}
+              >
                 <div className="flex gap-4">
                   {/* Avatar */}
                   <div className="w-[88px] h-[88px] rounded-2xl overflow-hidden shrink-0 relative bg-gray-100">
@@ -1826,10 +1831,12 @@ export function SessionsList() {
                   </div>
                 </div>
                 
-                <Link href={`/sessions/${doctor.id}`}
+                <Link
+                  href={`/sessions/${doctor.id}`}
+                  onClick={(e) => e.stopPropagation()}
                   className="w-full mt-4 bg-gradient-to-r from-[#29B055] to-[#0A9D46] hover:from-[#249e4d] hover:to-[#088C3E] text-white py-3.5 rounded-xl font-bold text-[14px] transition-all shadow-md shadow-green-100 flex justify-center items-center"
                 >
-                  BOOK APPOINTMENT
+                  VIEW PROFILE
                 </Link>
               </div>
             ))
@@ -2053,11 +2060,11 @@ export function SessionsList() {
                 </div>
               </div>
 
-              <Link 
+              <Link
                 href="/sessions/1"
                 className="bg-[#0D7A39] hover:bg-[#0B6630] text-white py-3 rounded-xl font-bold text-xs w-full mt-4 flex items-center justify-center shadow-sm transition-colors"
               >
-                Book Session
+                View Profile
               </Link>
             </div>
 
@@ -2098,11 +2105,11 @@ export function SessionsList() {
                 </div>
               </div>
 
-              <Link 
+              <Link
                 href="/sessions/2"
                 className="bg-[#0D7A39] hover:bg-[#0B6630] text-white py-3 rounded-xl font-bold text-xs w-full mt-4 flex items-center justify-center shadow-sm transition-colors"
               >
-                Book Session
+                View Profile
               </Link>
             </div>
 
@@ -2143,11 +2150,11 @@ export function SessionsList() {
                 </div>
               </div>
 
-              <Link 
+              <Link
                 href="/sessions/3"
                 className="bg-[#0D7A39] hover:bg-[#0B6630] text-white py-3 rounded-xl font-bold text-xs w-full mt-4 flex items-center justify-center shadow-sm transition-colors"
               >
-                Book Session
+                View Profile
               </Link>
             </div>
           </div>
@@ -2167,6 +2174,164 @@ export function SessionsList() {
           </div>
         </footer>
       </div>
+
+      {/* ========================================================
+          DOCTOR PROFILE MODAL
+          ======================================================== */}
+      {selectedDoctor && (
+        <div className="fixed inset-0 z-[1000002] flex items-end md:items-center justify-center p-0 md:p-4">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setSelectedDoctor(null)}
+          />
+
+          {/* Modal Sheet */}
+          <div className="relative bg-white w-full md:max-w-[480px] max-h-[92vh] overflow-y-auto rounded-t-[32px] md:rounded-[32px] shadow-2xl flex flex-col">
+            
+            {/* Drag Handle (mobile) */}
+            <div className="flex justify-center pt-3 pb-1 md:hidden">
+              <div className="w-10 h-1 bg-gray-200 rounded-full" />
+            </div>
+
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedDoctor(null)}
+              className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 transition-colors cursor-pointer"
+              aria-label="Close"
+            >
+              <X size={18} />
+            </button>
+
+            {/* Doctor Header */}
+            <div className="flex flex-col items-center pt-6 pb-5 px-6 border-b border-gray-100">
+              <div className="relative w-[96px] h-[96px] rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-100 mb-3">
+                <Image
+                  src={selectedDoctor.imageUrl}
+                  alt={selectedDoctor.name}
+                  fill
+                  className="object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <h2 className="text-[22px] font-black text-[#1C1C1C] text-center">
+                {selectedDoctor.name} ✦
+              </h2>
+              <p className="text-[#5C7182] text-[14px] font-medium mt-1">{selectedDoctor.specialty}</p>
+              <div className="flex items-center gap-1.5 mt-2">
+                {[1,2,3,4,5].map((s) => (
+                  <Star key={s} size={14} className={s <= Math.round(selectedDoctor.rating) ? 'fill-[#FBBF24] text-[#FBBF24]' : 'fill-gray-200 text-gray-200'} />
+                ))}
+                <span className="text-[13px] font-bold text-[#5C7182] ml-1">{selectedDoctor.rating.toFixed(1)} · 4.8k Mental Health Follow</span>
+              </div>
+            </div>
+
+            {/* Match Score */}
+            <div className="mx-6 mt-4 bg-[#EFFAF3] border border-emerald-100 rounded-2xl px-4 py-3 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#0D7A39] flex items-center justify-center shrink-0">
+                <Sparkles size={18} className="text-white" />
+              </div>
+              <div>
+                <span className="text-[11px] font-black text-[#0D7A39] uppercase tracking-wider">You match 92%</span>
+                <p className="text-[12px] text-[#5C7182] font-medium mt-0.5">Based on your profile & preferences</p>
+              </div>
+              <span className="ml-auto text-[28px] font-black text-[#0D7A39]">92%</span>
+            </div>
+
+            {/* About Section */}
+            <div className="px-6 mt-5">
+              <h3 className="text-[16px] font-black text-[#1C1C1C] mb-2">About the Doctor</h3>
+              <p className="text-[13px] text-[#5C7182] leading-relaxed font-medium">
+                &ldquo;Helping you understand yourself and find peace within 💛&rdquo;
+              </p>
+              <p className="text-[13px] text-[#5C7182] leading-relaxed mt-2">
+                With over 8 years of dedicated clinical experience, {selectedDoctor.name} specializes in cognitive-behavioral therapy for young adults. His approach combines empathetic listening with practical, evidence-based strategies to navigate life&apos;s most complex mental health challenges.
+              </p>
+              <div className="flex gap-4 mt-3">
+                <div className="bg-[#F4F6F9] rounded-xl px-3 py-2 text-center">
+                  <span className="text-[15px] font-black text-[#1C1C1C]">+8 years</span>
+                  <p className="text-[10px] text-[#5C7182] mt-0.5">Experience</p>
+                </div>
+                <div className="bg-[#F4F6F9] rounded-xl px-3 py-2 text-center">
+                  <span className="text-[15px] font-black text-[#1C1C1C]">CBT Certified</span>
+                  <p className="text-[10px] text-[#5C7182] mt-0.5">Certification</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Specialties */}
+            <div className="px-6 mt-5">
+              <h3 className="text-[16px] font-black text-[#1C1C1C] mb-2">Specialties</h3>
+              <div className="flex flex-wrap gap-2">
+                {selectedDoctor.tags.map((tag, i) => (
+                  <span key={i} className="bg-[#E6F4F0] text-[#0D7A39] text-[11px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wide">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Education */}
+            <div className="px-6 mt-5">
+              <h3 className="text-[16px] font-black text-[#1C1C1C] mb-3">Education & Certifications</h3>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#EFFAF3] flex items-center justify-center shrink-0">
+                    <span className="text-[#0D7A39] text-[12px]">🎓</span>
+                  </div>
+                  <div>
+                    <span className="text-[13px] font-black text-[#1C1C1C]">Cairo University</span>
+                    <p className="text-[11px] text-[#5C7182] mt-0.5">MD in Psychiatry & Mental Health</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#EFFAF3] flex items-center justify-center shrink-0">
+                    <span className="text-[#0D7A39] text-[12px]">🏅</span>
+                  </div>
+                  <div>
+                    <span className="text-[13px] font-black text-[#1C1C1C]">Certified CBT Therapist</span>
+                    <p className="text-[11px] text-[#5C7182] mt-0.5">International Association of CBT</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Patient Reviews */}
+            <div className="px-6 mt-5">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-[16px] font-black text-[#1C1C1C]">Patient Reviews</h3>
+                <span className="text-[12px] text-[#0D7A39] font-bold">Rated</span>
+              </div>
+              <div className="bg-[#F8FBFC] rounded-2xl p-4 border border-gray-100">
+                <div className="flex items-center gap-1 mb-2">
+                  {[1,2,3,4,5].map(s => <Star key={s} size={12} className="fill-[#FBBF24] text-[#FBBF24]" />)}
+                </div>
+                <p className="text-[13px] text-[#5C7182] italic leading-relaxed">
+                  &ldquo;Very helpful and understanding. {selectedDoctor.name.replace('Dr. ', '')} helped me realize behavioral patterns I never noticed before. Highly recommend for anyone dealing with anxiety.&rdquo;
+                </p>
+                <span className="text-[11px] text-gray-400 font-bold mt-2 block">— Verified Patient</span>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="px-6 mt-6 mb-6 flex flex-col gap-3">
+              <Link
+                href={`/sessions/${selectedDoctor.id}`}
+                onClick={() => setSelectedDoctor(null)}
+                className="w-full bg-gradient-to-r from-[#29B055] to-[#0A9D46] text-white py-4 rounded-2xl font-black text-[15px] flex items-center justify-center shadow-md shadow-green-100 hover:brightness-105 transition-all"
+              >
+                📅 Book Appointment
+              </Link>
+              <button
+                onClick={() => setSelectedDoctor(null)}
+                className="w-full bg-[#F4F6F9] text-[#5C7182] py-3.5 rounded-2xl font-bold text-[14px] hover:bg-gray-200 transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 5-Second Interactive Alert Modal */}
       {showFiveSecAlert && (
